@@ -133,7 +133,7 @@ models = {
 # Metrics storage
 results = []
 # Directory to save models
-model_dir = "saved_models"
+model_dir = "models"
 os.makedirs(model_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
 # Train and evaluate each model
