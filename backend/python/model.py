@@ -133,8 +133,13 @@ models = {
 # Metrics storage
 results = []
 # Directory to save models
-model_dir = "models"
+model_dir = "backend/python/models"
 os.makedirs(model_dir, exist_ok=True)  # Create the directory if it doesn't exist
+
+# Initialize variables to track the best model
+best_model = None
+best_model_name = None
+best_f1_score = 0  # Or any other metric you'd like to prioritize
 
 # Train and evaluate each model
 for model_name, model in models.items():
@@ -143,10 +148,7 @@ for model_name, model in models.items():
     # Train the model
     model.fit(X_train_scaled, y_train_enc)
 
-    # Save the trained model to a joblib file in the specified folder
-    model_file = os.path.join(model_dir, f"{model_name.replace(' ', '_')}.joblib")
-    dump(model, model_file)
-    print(f"{model_name} saved to {model_file}.")
+    
 
     # Predict on test data
     y_pred = model.predict(X_test_scaled)
@@ -173,6 +175,19 @@ for model_name, model in models.items():
     print(f"\nClassification Report for {model_name}:")
     print(classification_report(y_test_enc, y_pred))
     print("-" * 50)
+
+    # Update the best model if current model's F1 score is better
+    if f1 > best_f1_score:
+        best_f1_score = f1
+        best_model = model
+        best_model_name = model_name
+
+# Save the best model to a file
+best_model_path = os.path.join(model_dir, f"{best_model_name}.joblib")
+joblib.dump(best_model, best_model_path)
+
+print(f"\nBest model saved: {best_model_name} with F1 Score: {best_f1_score:.4f}")
+print(f"Model file: {best_model_path}")
 
 # Display results as a DataFrame
 results_df = pd.DataFrame(results)
