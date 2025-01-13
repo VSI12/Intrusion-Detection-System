@@ -2,8 +2,12 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 import joblib
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -110,4 +114,71 @@ sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_encoder.cla
 plt.title("Confusion Matrix")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.show()
+
+
+# Models to evaluate
+models = {
+    "Random Forest": RandomForestClassifier(random_state=42),
+    "Decision Tree": DecisionTreeClassifier(random_state=42),
+    "Ada Boost": AdaBoostClassifier(random_state=42),
+    "Naive Bayes": GaussianNB(),
+    "KNN": KNeighborsClassifier(),
+    "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42)
+
+}
+
+# Metrics storage
+results = []
+
+# Train and evaluate each model
+for model_name, model in models.items():
+    print(f"Training and evaluating {model_name}...")
+    
+    # Train the model
+    model.fit(X_train_scaled, y_train_enc)
+
+    # Save the trained model to a joblib file in the specified folder
+    model_file = os.path.join(model_dir, f"{model_name.replace(' ', '_')}.joblib")
+    dump(model, model_file)
+    print(f"{model_name} saved to {model_file}.")
+    
+    # Predict on test data
+    y_pred = model.predict(X_test_scaled)
+    
+    # Calculate metrics
+    acc = accuracy_score(y_test_enc, y_pred)
+    precision = precision_score(y_test_enc, y_pred, average="weighted")
+    recall = recall_score(y_test_enc, y_pred, average="weighted")
+    f1 = f1_score(y_test_enc, y_pred, average="weighted")
+    
+    # Append results
+    results.append({
+        "Model": model_name,
+        "Accuracy": acc,
+        "Precision": precision,
+        "Recall": recall,
+        "F1 Score": f1
+    })
+    
+    # Print confusion matrix and classification report
+    print(f"\nConfusion Matrix for {model_name}:")
+    print(confusion_matrix(y_test_enc, y_pred))
+    
+    print(f"\nClassification Report for {model_name}:")
+    print(classification_report(y_test_enc, y_pred))
+    print("-" * 50)
+
+# Display results as a DataFrame
+results_df = pd.DataFrame(results)
+print("\nModel Comparison:")
+print(results_df)
+
+# Visualize results
+import matplotlib.pyplot as plt
+results_df.set_index("Model")[["Accuracy", "Precision", "Recall", "F1 Score"]].plot(kind="bar", figsize=(10, 6))
+plt.title("Model Performance Comparison")
+plt.ylabel("Score")
+plt.xticks(rotation=45)
+plt.legend(loc="lower right")
 plt.show()
