@@ -11,6 +11,8 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import joblib
 import seaborn as sns
 import matplotlib.pyplot as plt
+from joblib import dump
+import os
 
 # File paths
 train_url = "backend/python/NSL-KDD-Dataset/NSL_KDD_Train.csv"
@@ -85,36 +87,36 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Train a Random Forest Classifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train_scaled, y_train_enc)
+# # Train a Random Forest Classifier
+# model = RandomForestClassifier(n_estimators=100, random_state=42)
+# model.fit(X_train_scaled, y_train_enc)
 
-# Save the trained model
-joblib.dump(model, "random_forest_model.joblib")
-print("Model saved as 'random_forest_model.joblib'")
+# # Save the trained model
+# joblib.dump(model, "random_forest_model.joblib")
+# print("Model saved as 'random_forest_model.joblib'")
 
-# Predict on test set
-y_pred = model.predict(X_test_scaled)
+# # Predict on test set
+# y_pred = model.predict(X_test_scaled)
 
-# Confusion matrix and classification report
-cm = confusion_matrix(y_test_enc, y_pred)
-# Filter target names to match actual classes in y_test_enc
-actual_classes = np.unique(y_test_enc)
-filtered_target_names = [label_encoder.classes_[i] for i in actual_classes]
+# # Confusion matrix and classification report
+# cm = confusion_matrix(y_test_enc, y_pred)
+# # Filter target names to match actual classes in y_test_enc
+# actual_classes = np.unique(y_test_enc)
+# filtered_target_names = [label_encoder.classes_[i] for i in actual_classes]
 
-# Generate the classification report
-report = classification_report(y_test_enc, y_pred, target_names=filtered_target_names)
+# # Generate the classification report
+# report = classification_report(y_test_enc, y_pred, target_names=filtered_target_names)
 
-print("\nClassification Report:")
-print(report)
+# print("\nClassification Report:")
+# print(report)
 
-# Plot confusion matrix
-plt.figure(figsize=(10, 8))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_encoder.classes_, yticklabels=label_encoder.classes_)
-plt.title("Confusion Matrix")
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.show()
+# # Plot confusion matrix
+# plt.figure(figsize=(10, 8))
+# sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_encoder.classes_, yticklabels=label_encoder.classes_)
+# plt.title("Confusion Matrix")
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.show()
 
 
 # Models to evaluate
@@ -130,6 +132,9 @@ models = {
 
 # Metrics storage
 results = []
+# Directory to save models
+model_dir = "saved_models"
+os.makedirs(model_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
 # Train and evaluate each model
 for model_name, model in models.items():
@@ -142,7 +147,7 @@ for model_name, model in models.items():
     model_file = os.path.join(model_dir, f"{model_name.replace(' ', '_')}.joblib")
     dump(model, model_file)
     print(f"{model_name} saved to {model_file}.")
-    
+
     # Predict on test data
     y_pred = model.predict(X_test_scaled)
     
