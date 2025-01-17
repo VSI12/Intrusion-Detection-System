@@ -38,3 +38,10 @@ def preprocess(file):
         lambda col: onehot_encoder.categories_[categorical_columns.index(col.name)].tolist().index(col)
     )
     df_categorical_onehot = onehot_encoder.transform(df_categorical_enc)
+
+    # Create a DataFrame for one-hot encoded features
+    df_categorical_onehot_df = pd.DataFrame(df_categorical_onehot, columns=dummy_columns)
+
+    # Combine numerical and one-hot encoded features
+    df_combined = pd.concat([df_numeric, df_categorical_onehot_df], axis=1)
+
