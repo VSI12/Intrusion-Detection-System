@@ -91,6 +91,23 @@ onehot_encoder_path = "backend/python/preprocess/onehot_encoder.joblib"
 scaler_path = "backend/python/preprocess/scaler.joblib"
 columns_info_path = "backend/python/preprocess/columns_info.joblib"
 
+# Save LabelEncoder for the labels
+joblib.dump(label_encoder, label_encoder_path)
+
+# Save OneHotEncoder for the categorical features
+joblib.dump(enc, onehot_encoder_path)
+
+# Save StandardScaler for feature scaling
+joblib.dump(scaler, scaler_path)
+
+# Save column information (if needed)
+columns_info = {
+    "categorical_columns": categorical_columns,
+    "dummy_columns": dumcols,
+}
+joblib.dump(columns_info, columns_info_path)
+
+
 
 # Models to evaluate
 models = {
