@@ -1,6 +1,5 @@
 # Import necessary libraries
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -9,7 +8,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 import joblib
-import seaborn as sns
 import matplotlib.pyplot as plt
 from joblib import dump
 import os
@@ -86,38 +84,6 @@ y_test_enc = label_encoder.transform(y_test)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
-
-# # Train a Random Forest Classifier
-# model = RandomForestClassifier(n_estimators=100, random_state=42)
-# model.fit(X_train_scaled, y_train_enc)
-
-# # Save the trained model
-# joblib.dump(model, "random_forest_model.joblib")
-# print("Model saved as 'random_forest_model.joblib'")
-
-# # Predict on test set
-# y_pred = model.predict(X_test_scaled)
-
-# # Confusion matrix and classification report
-# cm = confusion_matrix(y_test_enc, y_pred)
-# # Filter target names to match actual classes in y_test_enc
-# actual_classes = np.unique(y_test_enc)
-# filtered_target_names = [label_encoder.classes_[i] for i in actual_classes]
-
-# # Generate the classification report
-# report = classification_report(y_test_enc, y_pred, target_names=filtered_target_names)
-
-# print("\nClassification Report:")
-# print(report)
-
-# # Plot confusion matrix
-# plt.figure(figsize=(10, 8))
-# sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_encoder.classes_, yticklabels=label_encoder.classes_)
-# plt.title("Confusion Matrix")
-# plt.xlabel("Predicted")
-# plt.ylabel("Actual")
-# plt.show()
-
 
 # Models to evaluate
 models = {
