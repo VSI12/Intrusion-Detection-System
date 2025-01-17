@@ -53,3 +53,5 @@ def preprocess(file):
 
     # Scale features using the loaded StandardScaler
     X_scaled = scaler.transform(df_combined)
+    
+    return X_scaled
