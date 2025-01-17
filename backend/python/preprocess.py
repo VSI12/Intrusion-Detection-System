@@ -55,3 +55,8 @@ def preprocess(file):
     X_scaled = scaler.transform(df_combined)
     
     return X_scaled
+
+def model(file):
+    model = joblib.load("backend\python\models\best_model_Random Forest.joblib")
+    predictions = model.predict(file)
+    return predictions
