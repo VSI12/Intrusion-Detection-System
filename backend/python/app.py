@@ -1,4 +1,5 @@
 import os
+import json
 import boto3
 
 from flask import Flask, request, jsonify
@@ -45,6 +46,35 @@ def generate_presigned_url():
         print(f"Error generating presigned URL: {str(e)}")
         return jsonify({"error": "Failed to generate presigned URL"}), 500
 
+def receive_and_process_sqs_message():
+    """
+    Receives a message from the SQS queue, processes it, and downloads the associated S3 file.
+    Returns the local file path or None if an error occurs.
+    """
+    try:
+        response = sqs_client.receive_message(
+            QueueUrl=SQS_QUEUE_URL,
+            MaxNumberOfMessages=1,
+            WaitTimeSeconds=10
+        )
+        messages = response.get("Messages", [])
+        if not messages:
+            return None, "No messages in the queue"
+
+        # Parse SQS message
+        sqs_message = messages[0]
+        receipt_handle = sqs_message["ReceiptHandle"]
+        message_body = json.loads(sqs_message["Body"])
+        records = message_body.get("Records", [])
+
+        if not records:
+            return None, "No S3 event records found in the message"
+
+        # Extract S3 bucket and object key
+        s3_record = records[0]["s3"]
+        bucket_name = s3_record["bucket"]["name"]
+        object_key = s3_record["object"]["key"]
+        local_path = f"/tmp/{object_key}"
 
 if __name__ == '__main__':
     app.run(debug=True)
