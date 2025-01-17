@@ -75,6 +75,21 @@ def receive_and_process_sqs_message():
         bucket_name = s3_record["bucket"]["name"]
         object_key = s3_record["object"]["key"]
         local_path = f"/tmp/{object_key}"
+# Download file from S3
+        s3_client.download_file(bucket_name, object_key, local_path)
+        print(f"File downloaded to: {local_path}")
 
+        # Delete the SQS message
+        sqs_client.delete_message(QueueUrl=SQS_QUEUE_URL, ReceiptHandle=receipt_handle)
+        print("Message deleted from queue")
+        return local_path, None
+    except KeyError as e:
+        return None, f"KeyError in SQS message: {e}"
+    except json.JSONDecodeError as e:
+        return None, f"Error decoding JSON: {e}"
+    except ClientError as e:
+        return None, f"AWS ClientError: {e}"
+    except Exception as e:
+        return None, f"Unexpected error: {e}"
 if __name__ == '__main__':
     app.run(debug=True)
