@@ -85,6 +85,13 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
+# Define paths for the pickle files
+label_encoder_path = "backend/python/preprocess/label_encoder.joblib"
+onehot_encoder_path = "backend/python/preprocess/onehot_encoder.joblib"
+scaler_path = "backend/python/preprocess/scaler.joblib"
+columns_info_path = "backend/python/preprocess/columns_info.joblib"
+
+
 # Models to evaluate
 models = {
     "Random Forest": RandomForestClassifier(random_state=42),
