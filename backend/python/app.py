@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, methods=["POST"])
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, methods=["GET", "POST", "OPTIONS"])
 
 # Fetch environment variables
 load_dotenv()  
@@ -74,7 +74,7 @@ def receive_and_process_sqs_message():
         s3_record = records[0]["s3"]
         bucket_name = s3_record["bucket"]["name"]
         object_key = s3_record["object"]["key"]
-        local_path = f"/tmp/{object_key}"
+        local_path = f"./{object_key}"
 # Download file from S3
         s3_client.download_file(bucket_name, object_key, local_path)
         print(f"File downloaded to: {local_path}")
@@ -91,5 +91,39 @@ def receive_and_process_sqs_message():
         return None, f"AWS ClientError: {e}"
     except Exception as e:
         return None, f"Unexpected error: {e}"
+    
+@app.route('/process', methods=['POST'])
+def process_model():
+    """Processes the uploaded dataset by receiving it from SQS and performing analysis."""
+    from preprocess import preprocess, model
+
+    try:
+        # Process the SQS message to get the sfile path
+        local_path = receive_and_process_sqs_message()
+        
+        if not local_path:
+            print("Error: Failed to process SQS message or download file.")
+            return jsonify({"error": "Failed to process SQS message or download file"}), 400
+        
+        # Preprocess the downloaded file
+        try:
+            processed_data = preprocess(local_path)
+        except Exception as e:
+            print(f"Error during preprocessing: {str(e)}")
+            return jsonify({"error": "Preprocessing failed"}), 500
+
+        # Run the model on the preprocessed data
+        try:
+            # Simulate intrusion detection by passing X_test_inference to the trained model
+            predictions = model(processed_data)
+            print("Intrusion Detection Predictions:", predictions)
+        except Exception as e:
+            print(f"Error processing model: {str(e)}")
+            return jsonify({"error": "Failed to process model"}), 500
+
+    except Exception as e:
+        print(f"Unexpected error in /process route: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
