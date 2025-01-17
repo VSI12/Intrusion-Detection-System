@@ -21,6 +21,9 @@ one_hot_encoder = joblib.load("backend\python\preprocess\onehot_encoder.joblib")
 scaler = joblib.load("backend\python\preprocess\scaler.joblib")  # Pre-fitted StandardScaler
 columns_info = joblib.load("backend\python\preprocess\columns_info.joblib")  # Column order from training
 
+# Extract column information
+categorical_columns = columns_info["categorical_columns"]
+dummy_columns = columns_info["dummy_columns"]
 
 def preprocess(file):
     # Load datasets
