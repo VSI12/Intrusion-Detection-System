@@ -45,3 +45,11 @@ def preprocess(file):
     # Combine numerical and one-hot encoded features
     df_combined = pd.concat([df_numeric, df_categorical_onehot_df], axis=1)
 
+    # Add missing columns (if any) with default values and align column order
+    for col in dummy_columns:
+        if col not in df_combined.columns:
+            df_combined[col] = 0
+    df_combined = df_combined[dummy_columns]
+
+    # Scale features using the loaded StandardScaler
+    X_scaled = scaler.transform(df_combined)
