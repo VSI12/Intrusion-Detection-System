@@ -17,7 +17,7 @@ col_names = [
 
 # Load pre-fitted encoders and scaler
 label_encoders = joblib.load("backend\python\preprocess\label_encoder.joblib")  # Dictionary with LabelEncoders
-one_hot_encoder = joblib.load("backend\python\preprocess\onehot_encoder.joblib")  # Pre-fitted OneHotEncoder
+onehot_encoder = joblib.load("backend\python\preprocess\onehot_encoder.joblib")  # Pre-fitted OneHotEncoder
 scaler = joblib.load("backend\python\preprocess\scaler.joblib")  # Pre-fitted StandardScaler
 columns_info = joblib.load("backend\python\preprocess\columns_info.joblib")  # Column order from training
 
@@ -28,3 +28,13 @@ dummy_columns = columns_info["dummy_columns"]
 def preprocess(file):
     # Load datasets
     df = pd.read_csv(file,header=None, names = col_names)
+
+    # Extract categorical and numerical features
+    df_categorical = df[categorical_columns]
+    df_numeric = df.drop(columns=categorical_columns + ["label"])
+
+    # Encode categorical features using the loaded OneHotEncoder
+    df_categorical_enc = df_categorical.apply(
+        lambda col: onehot_encoder.categories_[categorical_columns.index(col.name)].tolist().index(col)
+    )
+    df_categorical_onehot = onehot_encoder.transform(df_categorical_enc)
