@@ -14,9 +14,11 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, methods=["POS
 load_dotenv()  
 AWS_REGION = os.getenv("AWS_REGION")
 S3_BUCKET = os.getenv("S3_BUCKET_NAME")
+SQS_QUEUE_URL = os.getenv("SQS_URL")
 
 # Initialize the S3 and SQS client
 s3_client = boto3.client("s3", region_name=AWS_REGION)
+sqs_client = boto3.client("sqs", region_name=AWS_REGION)
 
 @app.route('/generate-presigned-url', methods=['POST'])
 def generate_presigned_url():
