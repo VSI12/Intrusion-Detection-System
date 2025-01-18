@@ -16,10 +16,10 @@ col_names = [
 ]
 
 # Load pre-fitted encoders and scaler
-label_encoders = joblib.load("backend\python\preprocess\label_encoder.joblib")  # Dictionary with LabelEncoders
-onehot_encoder = joblib.load("backend\python\preprocess\onehot_encoder.joblib")  # Pre-fitted OneHotEncoder
-scaler = joblib.load("backend\python\preprocess\scaler.joblib")  # Pre-fitted StandardScaler
-columns_info = joblib.load("backend\python\preprocess\columns_info.joblib")  # Column order from training
+label_encoders = joblib.load("backend/python/preprocess/label_encoder.joblib")  # Dictionary with LabelEncoders
+onehot_encoder = joblib.load("backend/python/preprocess/onehot_encoder.joblib")  # Pre-fitted OneHotEncoder
+scaler = joblib.load("backend/python/preprocess/scaler.joblib")  # Pre-fitted StandardScaler
+columns_info = joblib.load("backend/python/preprocess/columns_info.joblib")  # Column order from training
 
 # Extract column information
 categorical_columns = columns_info["categorical_columns"]
