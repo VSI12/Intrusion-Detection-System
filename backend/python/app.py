@@ -74,7 +74,7 @@ def receive_and_process_sqs_message():
         s3_record = records[0]["s3"]
         bucket_name = s3_record["bucket"]["name"]
         object_key = s3_record["object"]["key"]
-        local_path = f"/tmp/{object_key}"
+        local_path = f"{object_key}"
 # Download file from S3
         s3_client.download_file(bucket_name, object_key, local_path)
         print(f"File downloaded to: {local_path}")
