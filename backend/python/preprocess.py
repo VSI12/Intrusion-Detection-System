@@ -27,20 +27,28 @@ dummy_columns = columns_info["dummy_columns"]
 
 def preprocess(file):
     # Load datasets
-    dataset = file
-    print(dataset)
-    df = pd.read_csv(dataset,header=None, names = col_names)
+    try:
+        df = pd.read_csv(file, header=None, names=col_names)
+        print("DataFrame loaded successfully.")
+    except Exception as e:
+        print(f"Error reading CSV: {str(e)}")
 
     # Extract categorical and numerical features
     df_categorical = df[categorical_columns]
     df_numeric = df.drop(columns=categorical_columns + ["label"])
 
     # Encode categorical features using the loaded OneHotEncoder
-    df_categorical_enc = df_categorical.apply(
-        lambda col: onehot_encoder.categories_[categorical_columns.index(col.name)].tolist().index(col)
-    )
-    df_categorical_onehot = onehot_encoder.transform(df_categorical_enc)
+    print('here')
+    df_categorical_enc = pd.DataFrame()
+    for col_name in df_categorical.columns:
+        # Map each category to its corresponding index
+        category_mapping = {cat: idx for idx, cat in enumerate(
+            onehot_encoder.categories_[categorical_columns.index(col_name)]
+        )}
+        # Map column values to indices, fill NaNs with 0 (or other defaults as appropriate)
+        df_categorical_enc[col_name] = df_categorical[col_name].map(category_mapping).fillna(0).astype(int)
 
+    df_categorical_onehot = onehot_encoder.transform(df_categorical_enc)
     # Create a DataFrame for one-hot encoded features
     df_categorical_onehot_df = pd.DataFrame(df_categorical_onehot, columns=dummy_columns)
 
