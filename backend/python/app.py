@@ -74,7 +74,7 @@ def receive_and_process_sqs_message():
         s3_record = records[0]["s3"]
         bucket_name = s3_record["bucket"]["name"]
         object_key = s3_record["object"]["key"]
-        local_path = f"./{object_key}"
+        local_path = f"/tmp/{object_key}"
 # Download file from S3
         s3_client.download_file(bucket_name, object_key, local_path)
         print(f"File downloaded to: {local_path}")
@@ -82,7 +82,7 @@ def receive_and_process_sqs_message():
         # Delete the SQS message
         sqs_client.delete_message(QueueUrl=SQS_QUEUE_URL, ReceiptHandle=receipt_handle)
         print("Message deleted from queue")
-        return local_path, None
+        return local_path
     except KeyError as e:
         return None, f"KeyError in SQS message: {e}"
     except json.JSONDecodeError as e:
@@ -100,7 +100,7 @@ def process_model():
     try:
         # Process the SQS message to get the sfile path
         local_path = receive_and_process_sqs_message()
-        
+        print(local_path)
         if not local_path:
             print("Error: Failed to process SQS message or download file.")
             return jsonify({"error": "Failed to process SQS message or download file"}), 400

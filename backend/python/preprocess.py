@@ -27,7 +27,9 @@ dummy_columns = columns_info["dummy_columns"]
 
 def preprocess(file):
     # Load datasets
-    df = pd.read_csv(file,header=None, names = col_names)
+    dataset = file
+    print(dataset)
+    df = pd.read_csv(dataset,header=None, names = col_names)
 
     # Extract categorical and numerical features
     df_categorical = df[categorical_columns]
