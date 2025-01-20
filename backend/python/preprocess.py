@@ -1,6 +1,8 @@
+import io
 import joblib
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
+import base64
+import matplotlib.pyplot as plt
 
 # Column names for the dataset
 col_names = [
@@ -52,14 +54,21 @@ def preprocess(file):
     # Create a DataFrame for one-hot encoded features
     df_categorical_onehot_df = pd.DataFrame(df_categorical_onehot, columns=dummy_columns)
 
-    # Combine numerical and one-hot encoded features
-    df_combined = pd.concat([df_numeric, df_categorical_onehot_df], axis=1)
+    try:
+        # Combine numerical and one-hot encoded features
+        df_combined = pd.concat([df_numeric.reset_index(drop=True), df_categorical_onehot_df], axis=1)
 
-    # Add missing columns (if any) with default values and align column order
-    for col in dummy_columns:
-        if col not in df_combined.columns:
-            df_combined[col] = 0
-    df_combined = df_combined[dummy_columns]
+        # Add missing columns and align column order
+        for col in scaler.feature_names_in_:
+            if col not in df_combined.columns:
+                df_combined[col] = 0
+        df_combined = df_combined[scaler.feature_names_in_]
+    except KeyError as e:
+        print(f"Error while combining features: Missing columns. {str(e)}")
+        
+    except Exception as e:
+        print(f"Unexpected error while combining features: {str(e)}")
+        
 
     # Scale features using the loaded StandardScaler
     X_scaled = scaler.transform(df_combined)
@@ -69,4 +78,28 @@ def preprocess(file):
 def model(file):
     model = joblib.load("backend/python/models/best_model_Random Forest.joblib")
     predictions = model.predict(file)
+
+     # Generate a DataFrame for better plotting (optional, based on output structure)
+    results_df = pd.DataFrame(predictions, columns=["Prediction"])
+    
+    # Plot the results
+    plt.figure(figsize=(10, 6))
+    results_df["Prediction"].value_counts().plot(kind="bar", color="skyblue")
+    plt.title("Prediction Distribution")
+    plt.xlabel("Classes")
+    plt.ylabel("Count")
+    plt.xticks(rotation=0)
+    plt.tight_layout()
+    
+    # Save plot to a buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    plt.close()
+
+    # Encode the image to base64
+    graph_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    buffer.close()
+    
+    return {"predictions": predictions.tolist(), "graph": graph_base64}
     return predictions
