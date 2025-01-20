@@ -74,7 +74,7 @@ def receive_and_process_sqs_message():
         s3_record = records[0]["s3"]
         bucket_name = s3_record["bucket"]["name"]
         object_key = s3_record["object"]["key"]
-        local_path = f"/tmp/{object_key}"
+        local_path = f"{object_key}"
 # Download file from S3
         s3_client.download_file(bucket_name, object_key, local_path)
         print(f"File downloaded to: {local_path}")
@@ -116,7 +116,13 @@ def process_model():
         try:
             # Simulate intrusion detection by passing X_test_inference to the trained model
             predictions = model(processed_data)
-            print("Intrusion Detection Predictions:", predictions)
+
+            return jsonify({
+            "message": "Processing complete",
+            "predictions": predictions["predictions"],
+            "graph": predictions["graph"]
+        }), 200
+
         except Exception as e:
             print(f"Error processing model: {str(e)}")
             return jsonify({"error": "Failed to process model"}), 500
