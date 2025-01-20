@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import base64
 import matplotlib.pyplot as plt
+from collections import Counter
 
 # Column names for the dataset
 col_names = [
@@ -87,8 +88,38 @@ def model(file):
     label_mapping = {0: 'apache2', 1: 'back', 2: 'buffer_overflow', 3: 'ftp_write', 4: 'guess_passwd', 5: 'httptunnel', 6: 'imap', 7: 'ipsweep', 8: 'land', 9: 'loadmodule', 10: 'mailbomb', 11: 'mscan', 12: 'multihop', 13: 'named', 14: 'neptune', 15: 'nmap', 16: 'normal', 17: 'perl', 18: 'phf', 19: 'pod', 20: 'portsweep', 21: 'processtable', 22: 'ps', 23: 'rootkit', 24: 'saint', 25: 'satan', 26: 'sendmail', 27: 'smurf', 28: 'snmpgetattack', 29: 'snmpguess', 30: 'spy', 31: 'sqlattack', 32: 'teardrop', 33: 'udpstorm', 34: 'warezclient', 35: 'warezmaster', 36: 'worm', 37: 'xlock', 38: 'xsnoop', 39: 'xterm'}
     
     # Map predictions to class labels
+    
     labels = [label_mapping.get(pred, f"Unknown ({pred})") for pred in predictions]
     
+    # Count the occurrences of each label
+    label_counts = Counter(labels)
+
+    # Separate Normal traffic and aggregate Malicious traffic
+    normal_count = label_counts.get("normal", 0)
+    malicious_count = sum(count for label, count in label_counts.items() if label != "Normal")
+
+    # Print the summary
+    print(f"Normal Traffic: {normal_count}")
+    print(f"Malicious Traffic (aggregated): {malicious_count}")
+    
+    # Plot the summary
+    categories = ["Normal", "Malicious"]
+    counts = [normal_count, malicious_count]
+    plt.bar(categories, counts, color=["green", "red"])
+    plt.title("Traffic Summary")
+    plt.xlabel("Traffic Type")
+    plt.ylabel("Count")
+    plt.show()
+    # Save plot to a buffer
+    buffer0 = io.BytesIO()
+    plt.savefig(buffer0, format="png")
+    buffer0.seek(0)
+    plt.close()
+
+    # Encode the image to base64
+    graph_base641 = base64.b64encode(buffer0.getvalue()).decode("utf-8")
+    buffer0.close()
+
     # Count occurrences of each label
     unique, counts = np.unique(labels, return_counts=True)
     
@@ -110,4 +141,4 @@ def model(file):
     graph_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     buffer.close()
     
-    return {"predictions": predictions.tolist(), "graph": graph_base64}
+    return {"predictions": predictions.tolist(), "graph": graph_base64, "graph2": graph_base641}
