@@ -108,6 +108,9 @@ columns_info = {
 joblib.dump(columns_info, columns_info_path)
 
 
+# Get the mapping of integers to labels
+label_mapping = {index: label for index, label in enumerate(label_encoder.classes_)}
+print(label_mapping)
 
 # Models to evaluate
 models = {
