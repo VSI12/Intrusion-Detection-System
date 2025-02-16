@@ -1,26 +1,48 @@
-"use client"; // Ensure it's a client component for interactivity
-import Link from "next/link";
+"use client"
+
+import Link from "next/link"
 
 export default function Navbar() {
   return (
-    <nav className="w-full flex justify-between items-center p-4 bg-white shadow-md">
-      {/* Logo */}
-      <div className="text-2xl font-bold">
-        <Link href="/">IDS.</Link>
-      </div>
+    <div className="w-full border-b border-[#071739]/20">
+      <nav className="max-w-[1400px] mx-auto flex justify-between items-center px-8 py-6">
+        {/* Logo */}
+        <div>
+          <Link
+            href="/"
+            className="text-[#071739] font-mono text-2xl"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            IDS.
+          </Link>
+        </div>
 
-      {/* Navigation Links */}
-      <div className="space-x-6 hidden md:flex">
-        <Link href="/" className="text-gray-700 hover:text-blue-500">
-          Home
-        </Link>
-        <Link href="/about" className="text-gray-700 hover:text-blue-500">
-          About
-        </Link>
-        <Link href="/contact" className="text-gray-700 hover:text-blue-500">
-          Contact
-        </Link>
-      </div>
-    </nav>
-  );
+        {/* Navigation Links */}
+        <div className="flex items-center space-x-12">
+          <Link
+            href="/"
+            className="text-[#071739] text-lg hover:text-[#071739]/80 transition-colors"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            className="text-[#071739] text-lg hover:text-[#071739]/80 transition-colors"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            About
+          </Link>
+          <Link
+            href="/contact"
+            className="text-[#071739] text-lg hover:text-[#071739]/80 transition-colors"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            Contact
+          </Link>
+        </div>
+      </nav>
+    </div>
+  )
 }
+
