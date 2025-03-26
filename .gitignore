@@ -1,0 +1,27 @@
+# Terraform state files (contains sensitive info)
+*.tfstate
+*.tfstate.backup
+
+# Ignore crash logs
+crash.log
+
+# Terraform variable files (if they contain secrets)
+terraform.tfvars
+*.auto.tfvars
+
+# Ignore local Terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# Ignore sensitive files (e.g., SSH keys, credentials)
+*.pem
+*.key
+*.p12
+*.crt
+*.env
+
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore output logs
+terraform.tf.log
