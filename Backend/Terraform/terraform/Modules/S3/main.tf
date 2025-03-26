@@ -35,3 +35,14 @@ resource "aws_s3_bucket_cors_configuration" "cors_config" {
     max_age_seconds = 3000
   }
 }
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.upload_bucket.id
+
+  queue {
+    queue_arn     = var.queue_arn
+    events        = ["s3:ObjectCreated:*"]
+  }
+  
+  depends_on = [ var.queue_name, var.queue_policy]
+}
