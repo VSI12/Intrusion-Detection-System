@@ -24,7 +24,7 @@ export default function UploadPage() {
 
     try {
       // Step 1: Get the presigned URL from the backend
-      const response = await fetch("http://localhost:5000/generate-presigned-url", {
+      const response = await fetch("/api/generate-presigned-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
