@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "upload_bucket" {
     Name        = var.bucket_name
     Environment = var.environment
   }
-  
+
 }
 
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
@@ -40,9 +40,9 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = aws_s3_bucket.upload_bucket.id
 
   queue {
-    queue_arn     = var.queue_arn
-    events        = ["s3:ObjectCreated:*"]
+    queue_arn = var.queue_arn
+    events    = ["s3:ObjectCreated:*"]
   }
-  
-  depends_on = [ var.queue_name, var.queue_policy]
+
+  depends_on = [var.queue_name, var.queue_policy]
 }

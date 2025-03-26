@@ -4,6 +4,6 @@ terraform {
     key            = "terraform/state/dev/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "ids-backend-table-dev"  
+    dynamodb_table = "ids-backend-table-dev"
   }
 }
