@@ -7,3 +7,7 @@ variable "upload_bucket_arn" {
   type        = string
 
 }
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+}

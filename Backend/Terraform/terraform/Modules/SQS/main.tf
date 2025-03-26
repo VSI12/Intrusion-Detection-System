@@ -1,5 +1,10 @@
 resource "aws_sqs_queue" "file_upload_queue" {
   name = var.queue_name
+
+  tags = {
+    Name        = var.queue_name
+    Environment = var.environment
+  }
 }
 
 data "aws_iam_policy_document" "queue" {
