@@ -24,3 +24,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_c
     }
   }
 }
+resource "aws_s3_bucket_cors_configuration" "cors_config" {
+  bucket = aws_s3_bucket.upload_bucket.bucket
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "POST", "PUT"]
+    allowed_origins = ["http://localhost:3000"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}
