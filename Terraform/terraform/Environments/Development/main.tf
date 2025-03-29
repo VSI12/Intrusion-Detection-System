@@ -2,14 +2,11 @@ module "s3" {
   source       = "../../modules/s3"
   bucket_name  = var.bucket_name
   environment  = var.environment
-  queue_name   = var.queue_name
-  queue_arn    = module.sqs.queue_arn
-  queue_policy = module.sqs.queue_policy
 }
 
-module "sqs" {
-  source            = "../../modules/sqs"
-  queue_name        = var.queue_name
-  upload_bucket_arn = module.s3.bucket_arn
-
+module "vpc" {
+  source = "../../modules/vpc"
+  environment = var.environment
+  vpc_cidr_block = var.vpc_cidr_block
+  vpc_name = var.vpc_name
 }
