@@ -28,26 +28,29 @@ variable "private_subnet_cidrs" {
   description = "List of private subnet CIDRs"
   type        = list(string)
 }
-
 variable "availability_zones" {
   description = "List of Availability Zones"
   type        = list(string)
 }
-
 variable "region" {
   description = "AWS region"
   type        = string
   default     = "us-east-1"
 }
-
-
 variable "ecr_name" {
   description = "ECR Repository Name"
   type        = string
   default     = "ids-repo"
 }
-
 variable "public_cidr" {
   description = "public cidr"
   type = string
+}
+variable "next_ecr" {
+    description = "The name of the NextJS frontend ECR repository"
+    type        = string
+}
+variable "flask_ecr" {
+    description = "The name of the Flask backend ECR repository"
+    type        = string
 }
