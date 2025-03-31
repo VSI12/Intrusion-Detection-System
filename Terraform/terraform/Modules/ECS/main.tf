@@ -1,4 +1,4 @@
-resource "aws_ecs_cluster" "name" {
+resource "aws_ecs_cluster" "IDS_cluster" {
   name = var.cluster_name
 
   tags = {
