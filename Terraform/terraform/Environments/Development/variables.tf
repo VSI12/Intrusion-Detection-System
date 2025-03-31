@@ -46,3 +46,8 @@ variable "ecr_name" {
   type        = string
   default     = "ids-repo"
 }
+
+variable "public_cidr" {
+  description = "public cidr"
+  type = string
+}
