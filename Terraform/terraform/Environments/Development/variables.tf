@@ -39,3 +39,10 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
+
+
+variable "ecr_name" {
+  description = "ECR Repository Name"
+  type        = string
+  default     = "ids-repo"
+}
