@@ -14,3 +14,10 @@ module "vpc" {
   availability_zones = var.availability_zones
   public_cidr = var.public_cidr
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+  flask_ecr = var.flask_ecr
+  next_ecr = var.next_ecr
+  environment = var.environment
+}
