@@ -14,3 +14,10 @@ module "vpc" {
   availability_zones = var.availability_zones
 
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+  ecr_name = var.ecr_name
+  environment = var.environment
+  
+}
