@@ -43,3 +43,18 @@ resource "aws_subnet" "private" {
     Name = "${var.environment}-Private Subnet-${count.index + 1}"
   }
 }
+
+# Public Route Table (Routes outbound traffic to IGW)
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.ids-vpc.id
+
+  route {
+    cidr_block = var.public_cidr
+    gateway_id = aws_internet_gateway.ids_igw.id
+  }
+
+  tags = {
+    Name = "${var.environment}-Public Route Table"
+  }
+}
+
