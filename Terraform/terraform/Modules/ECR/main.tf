@@ -1,12 +1,24 @@
-resource "aws_ecr_repository" "IDS_repo" {
-  name                 = "IDS-repo"
+resource "aws_ecr_repository" "NextJS_ecr" {
+  name                 = var.next_ecr
+  image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
   }
-
     tags = {
-        Name        = var.ecr_name
+        Name        = var.next_ecr
+        Environment = var.environment
+    }
+}
+resource "aws_ecr_repository" "flask_repo" {
+  name                 = var.flask_ecr
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+    tags = {
+        Name        = var.flask_ecr
         Environment = var.environment
     }
 }
