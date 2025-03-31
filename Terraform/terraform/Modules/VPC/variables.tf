@@ -27,3 +27,8 @@ variable "availability_zones" {
   description = "List of Availability Zones"
   type        = list(string)
 }
+
+variable "public_cidr" {
+  description = "CIDR nlock for the public subnet route table"
+  type = string
+}
