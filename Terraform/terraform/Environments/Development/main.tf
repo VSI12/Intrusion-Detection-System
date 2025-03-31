@@ -14,4 +14,3 @@ module "vpc" {
   availability_zones = var.availability_zones
   public_cidr = var.public_cidr
 }
-
