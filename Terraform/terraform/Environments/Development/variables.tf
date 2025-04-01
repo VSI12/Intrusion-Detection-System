@@ -104,5 +104,5 @@ variable "next_container_port" {
 variable "role_name" {
   description = "ECS service role name"
   type        = string
-  default = "ecs-service-role"
+  default     = "ecs-service-role"
 }
