@@ -54,3 +54,30 @@ variable "flask_ecr" {
   description = "The name of the Flask backend ECR repository"
   type        = string
 }
+
+#APPLICATION LOAD BALANCER
+variable "nextjs_fargate_tg" {
+  description = "The name of the NextJS Fargate target group"
+  type        = string
+}
+
+variable "nextjs_fargate_listener" {
+  description = "The name of the NextJS Fargate listener"
+  type        = string
+}
+
+variable "external_alb_port" {
+  description = "The port for the external ALB"
+  type        = number
+  default     = 80
+}
+
+variable "external_alb_protocol" {
+  description = "The protocol for the external ALB"
+  type        = string
+  default     = "HTTP"
+}
+variable "alb_name_external" {
+  description = "The name of the ALB"
+  type        = string
+}
