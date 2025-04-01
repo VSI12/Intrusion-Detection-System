@@ -17,8 +17,8 @@ resource "aws_ecs_task_definition" "frontend" {
 
   container_definitions = jsonencode([
     {
-      name      = "backend-container"
-      image     = "${aws_ecr_repository.next_ecr.repository_url}:latest"
+      name      =  "${var.next_ecr_name}"
+      image     = "${var.next_ecr}:latest"
       essential = true
       portMappings = [
         {
@@ -41,15 +41,15 @@ resource "aws_ecs_service" "nextjs_service" {
 
   network_configuration {
     subnets         = tolist([var.private_subnet_ids[0], var.private_subnet_ids[1]])
-    security_groups = [aws_security_group.ecs_sg.id] # Replace with your security group ID                                        # Change based on your setup
+    security_groups = [aws_security_group.nextjs_service_sg.id] # Replace with your security group ID                                        # Change based on your setup
   }
   load_balancer {
     target_group_arn = var.nextjs_alb_target_group_arn
-    container_name   = var.next_ecr
+    container_name   = var.next_ecr_name
     container_port   = var.next_container_port
   }
 
-  depends_on = [var.nextjs_alb_listener_arn]
+  # depends_on = [var.nextjs_alb_listener_arn]
 }
 
 
@@ -97,9 +97,10 @@ resource "aws_iam_role_policy" "ecs_service_policy" {
         Action = [
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer"
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
         ]
-        Resource = "${var.next_ecr_arn}" # Correctly reference the full ECR URI
+        Resource = "${var.next_ecr}" # Correctly reference the full ECR URI
       },
       {
         Effect   = "Allow"

@@ -12,10 +12,6 @@ variable "next_ecr" {
   description = "The name of the ECR repository"
   type        = string
 }
-variable "next_ecr_arn" {
-  description = "The name of the ECR repository"
-  type        = string
-}
 
 variable "private_subnet_ids" {
   type        = list(string)
@@ -37,10 +33,6 @@ variable "next_container_port" {
   type        = string
 }
 
-variable "ecs_execution_role" {
-  description = "The ARN of the ECS execution role"
-  type        = string
-}
 
 variable "nextjs_alb_listener_arn" {
   description = "The ARN of the external ALB listener"
@@ -53,5 +45,21 @@ variable "nextjs_alb_target_group_arn" {
 }
 variable "role_name" {
   description = "ECS service role name"
+  type        = string
+
+}
+
+variable "nextjs_alb_sg" {
+  description = "The security group ID for the NextJS ALB"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "The VPC ID"
+  type        = string
+}
+
+variable "next_ecr_name" {
+  description = "The name of the ECR repository"
   type        = string
 }
