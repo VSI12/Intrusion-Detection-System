@@ -23,3 +23,14 @@ variable "nextjs_fargate_listener" {
   type        = string
 }
 
+variable "external_alb_port" {
+  description = "The port for the external ALB"
+  type        = number
+  default     = 80
+}
+
+variable "external_alb_protocol" {
+  description = "The protocol for the external ALB"
+  type        = string
+  default     = "HTTP"
+}

@@ -14,10 +14,8 @@ resource "aws_lb" "ids_alb_external" {
 
 resource "aws_lb_listener" "nextjs_fargate" {
   load_balancer_arn = aws_lb.ids_alb_external.arn
-  port              = "443"
-  protocol          = "HTTPS"
-#   ssl_policy        = "ELBSecurityPolicy-2016-08"
-#   certificate_arn   = aws_acm_certificate.ids_cert.arn
+  port              = var.external_alb_port
+  protocol          = var.external_alb_protocol
 
   default_action {
     type             = "forward"
