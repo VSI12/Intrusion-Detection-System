@@ -2,7 +2,7 @@ resource "aws_ecs_cluster" "IDS_cluster" {
   name = var.cluster_name
 
   tags = {
-    Name = var.cluster_name
+    Name        = var.cluster_name
     environment = var.environment
   }
 }
@@ -17,8 +17,8 @@ resource "aws_ecs_task_definition" "backend" {
 
   container_definitions = jsonencode([
     {
-      name  = "backend-container"
-      image = aws_ecr_repository.flask_repo.repository_url
+      name      = "backend-container"
+      image     = aws_ecr_repository.flask_repo.repository_url
       essential = true
       portMappings = [
         {

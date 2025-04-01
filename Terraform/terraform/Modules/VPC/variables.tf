@@ -5,7 +5,7 @@ variable "environment" {
 
 variable "vpc_cidr_block" {
   description = "value of the VPC CIDR block"
-  type = string
+  type        = string
 }
 
 variable "vpc_name" {
@@ -30,5 +30,5 @@ variable "availability_zones" {
 
 variable "public_cidr" {
   description = "CIDR nlock for the public subnet route table"
-  type = string
+  type        = string
 }

@@ -11,7 +11,7 @@ variable "environment" {
 variable "vpc_cidr_block" {
   description = "CIDR block for the VPC"
   type        = string
-  
+
 }
 
 variable "vpc_name" {
@@ -44,13 +44,13 @@ variable "ecr_name" {
 }
 variable "public_cidr" {
   description = "public cidr"
-  type = string
+  type        = string
 }
 variable "next_ecr" {
-    description = "The name of the NextJS frontend ECR repository"
-    type        = string
+  description = "The name of the NextJS frontend ECR repository"
+  type        = string
 }
 variable "flask_ecr" {
-    description = "The name of the Flask backend ECR repository"
-    type        = string
+  description = "The name of the Flask backend ECR repository"
+  type        = string
 }

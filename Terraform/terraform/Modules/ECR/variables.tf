@@ -1,13 +1,13 @@
 variable "next_ecr" {
-    description = "The name of the ECR repository"
-    type        = string
+  description = "The name of the ECR repository"
+  type        = string
 }
 variable "flask_ecr" {
-    description = "The name of the ECR repository"
-    type        = string
+  description = "The name of the ECR repository"
+  type        = string
 }
 
 variable "environment" {
-    description = "Deployment environment"
-    type        = string
+  description = "Deployment environment"
+  type        = string
 }

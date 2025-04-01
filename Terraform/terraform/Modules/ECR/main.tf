@@ -5,10 +5,10 @@ resource "aws_ecr_repository" "NextJS_ecr" {
   image_scanning_configuration {
     scan_on_push = true
   }
-    tags = {
-        Name        = var.next_ecr
-        Environment = var.environment
-    }
+  tags = {
+    Name        = var.next_ecr
+    Environment = var.environment
+  }
 }
 resource "aws_ecr_repository" "flask_repo" {
   name                 = var.flask_ecr
@@ -17,8 +17,8 @@ resource "aws_ecr_repository" "flask_repo" {
   image_scanning_configuration {
     scan_on_push = true
   }
-    tags = {
-        Name        = var.flask_ecr
-        Environment = var.environment
-    }
+  tags = {
+    Name        = var.flask_ecr
+    Environment = var.environment
+  }
 }
