@@ -34,3 +34,8 @@ variable "external_alb_protocol" {
   type        = string
   default     = "HTTP"
 }
+
+variable "public_subnets" {
+  description = "List of public subnet IDs"
+  type        = list(string)
+}
