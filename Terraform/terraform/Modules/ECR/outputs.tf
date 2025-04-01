@@ -7,10 +7,10 @@ output "nextjs_repo_url" {
 }
 
 output "flask_repo_arn" {
-  value = aws_ecr_repository.flask_repo.arn 
+  value = aws_ecr_repository.flask_repo.arn
 }
 
 output "nextjs_repo_arn" {
-  value = aws_ecr_repository.NextJS_ecr.arn 
-  
+  value = aws_ecr_repository.NextJS_ecr.arn
+
 }

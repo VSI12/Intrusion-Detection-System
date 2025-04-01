@@ -11,7 +11,7 @@ variable "environment" {
 variable "vpc_cidr_block" {
   description = "CIDR block for the VPC"
   type        = string
-  
+
 }
 
 variable "vpc_name" {
@@ -44,13 +44,65 @@ variable "ecr_name" {
 }
 variable "public_cidr" {
   description = "public cidr"
-  type = string
+  type        = string
 }
-variable "next_ecr" {
-    description = "The name of the NextJS frontend ECR repository"
-    type        = string
+variable "next_ecr_name" {
+  description = "The name of the NextJS frontend ECR repository"
+  type        = string
+  default     = "nextjs-repo"
 }
 variable "flask_ecr" {
-    description = "The name of the Flask backend ECR repository"
-    type        = string
+  description = "The name of the Flask backend ECR repository"
+  type        = string
+}
+
+#APPLICATION LOAD BALANCER
+variable "nextjs_fargate_tg" {
+  description = "The name of the NextJS Fargate target group"
+  type        = string
+}
+
+variable "nextjs_fargate_listener" {
+  description = "The name of the NextJS Fargate listener"
+  type        = string
+}
+
+variable "external_alb_port" {
+  description = "The port for the external ALB"
+  type        = number
+  default     = 80
+}
+
+variable "external_alb_protocol" {
+  description = "The protocol for the external ALB"
+  type        = string
+  default     = "HTTP"
+}
+variable "alb_name_external" {
+  description = "The name of the ALB"
+  type        = string
+}
+
+
+#ELASTIC CONTAINER SERVICE
+variable "cluster_name" {
+  description = "value of the ECS cluster name"
+  type        = string
+}
+
+
+variable "nextjs_service" {
+  description = "The name of the ECS service"
+  type        = string
+}
+
+variable "next_container_port" {
+  description = "The name of the container"
+  type        = string
+}
+
+variable "role_name" {
+  description = "ECS service role name"
+  type        = string
+  default     = "ecs-service-role"
 }

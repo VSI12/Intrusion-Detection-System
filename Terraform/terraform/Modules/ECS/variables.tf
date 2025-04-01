@@ -8,12 +8,58 @@ variable "environment" {
   type        = string
 }
 
-variable "backend_taskdefinition" {
-  description = "value of the backend task definition name"
+variable "next_ecr" {
+  description = "The name of the ECR repository"
   type        = string
 }
 
-variable "container_def" {
-  description = "value of the container definition name"
+variable "private_subnet_ids" {
+  type        = list(string)
+  description = "List of private subnet IDs"
+}
+
+variable "ecs_sg" {
+  description = "The security group ID for the ECS service"
+  type        = string
+}
+
+variable "nextjs_service" {
+  description = "The name of the ECS service"
+  type        = string
+}
+
+variable "next_container_port" {
+  description = "The name of the container"
+  type        = string
+}
+
+
+variable "nextjs_alb_listener_arn" {
+  description = "The ARN of the external ALB listener"
+  type        = string
+}
+
+variable "nextjs_alb_target_group_arn" {
+  description = "The ARN of the NextJS Fargate target group"
+  type        = string
+}
+variable "role_name" {
+  description = "ECS service role name"
+  type        = string
+
+}
+
+variable "nextjs_alb_sg" {
+  description = "The security group ID for the NextJS ALB"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "The VPC ID"
+  type        = string
+}
+
+variable "next_ecr_name" {
+  description = "The name of the ECR repository"
   type        = string
 }
