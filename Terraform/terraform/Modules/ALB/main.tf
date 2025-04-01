@@ -3,7 +3,7 @@ resource "aws_lb" "ids_alb_external" {
   name               = var.alb_name_external
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.lb_sg.id]
+  security_groups    = [aws_security_group.nextjs_alb_sg.id]
   subnets            = [for subnet in aws_subnet.public : subnet.id]
 
   tags = {
