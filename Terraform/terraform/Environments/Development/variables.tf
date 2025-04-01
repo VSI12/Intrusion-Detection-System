@@ -46,9 +46,10 @@ variable "public_cidr" {
   description = "public cidr"
   type        = string
 }
-variable "next_ecr" {
+variable "next_ecr_name" {
   description = "The name of the NextJS frontend ECR repository"
   type        = string
+  default     = "nextjs-repo"
 }
 variable "flask_ecr" {
   description = "The name of the Flask backend ECR repository"
@@ -80,4 +81,28 @@ variable "external_alb_protocol" {
 variable "alb_name_external" {
   description = "The name of the ALB"
   type        = string
+}
+
+
+#ELASTIC CONTAINER SERVICE
+variable "cluster_name" {
+  description = "value of the ECS cluster name"
+  type        = string
+}
+
+
+variable "nextjs_service" {
+  description = "The name of the ECS service"
+  type        = string
+}
+
+variable "next_container_port" {
+  description = "The name of the container"
+  type        = string
+}
+
+variable "role_name" {
+  description = "ECS service role name"
+  type        = string
+  default = "ecs-service-role"
 }
