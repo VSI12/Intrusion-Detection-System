@@ -12,7 +12,7 @@ resource "aws_lb" "ids_alb_external" {
   }
 }
 
-resource "aws_lb_listener" "front_end" {
+resource "aws_lb_listener" "nextjs_fargate" {
   load_balancer_arn = aws_lb.ids_alb_external.arn
   port              = "443"
   protocol          = "HTTPS"
@@ -21,6 +21,6 @@ resource "aws_lb_listener" "front_end" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.front_end.arn
+    target_group_arn = aws_lb_target_group.nextjs_fargate.arn
   }
 }
