@@ -23,4 +23,22 @@ resource "aws_lb_listener" "nextjs_fargate" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.nextjs_fargate.arn
   }
+
+  tags = {
+    Environment = var.environment
+    Name        = var.nextjs_fargate_listener
+  }
+}
+
+resource "aws_lb_target_group" "nextjs_fargate" {
+  name        = var.nextjs_fargate_tg
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+
+  tags = {
+    Environment = var.environment
+    Name        = var.nextjs_fargate_tg
+  }
 }
