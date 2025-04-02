@@ -23,37 +23,22 @@ export default function UploadPage() {
     }
 
     try {
-      // Step 1: Get the presigned URL from the backend
-      const response = await fetch("/api/generate-presigned-url", {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("http://localhost:5000/upload", {  // Adjust URL for production
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          file_name: selectedFile.name,
-          file_type: selectedFile.type,
-        }),
+        body: formData,
       });
 
-      if (!response.ok) throw new Error("Failed to get presigned URL");
+      if (!response.ok) throw new Error("Failed to upload to Flask");
 
-      const { url } = await response.json();
-
-      // Step 2: Upload file to S3 using the presigned URL
-      const uploadResponse = await fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": selectedFile.type },
-        body: selectedFile,
-      });
-
-      if (uploadResponse.ok) {
-        setUploadStatus({ status: "success", message: "File uploaded successfully!" });
-      } else {
-        throw new Error("Failed to upload file to S3");
-      }
+      const result = await response.json();
+      setUploadStatus({ status: "success", message: result.message });
     } catch (error) {
       setUploadStatus({ status: "error", message: `Error: ${(error as Error).message}` });
     }
   };
-
   return (
     <div className="max-h-screen">
       <main className="max-w-[1400px] mx-auto px-8 pt-20">
