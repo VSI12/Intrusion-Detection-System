@@ -147,4 +147,11 @@ def model(file):
     graph_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     buffer.close()
     
-    return {"predictions": predictions.tolist(), "graph": graph_base64, "graph2": graph_base641}
+    return {
+        "predictions": {
+            "normal": normal_count,
+            "malicious": malicious_count
+            },
+        "graph": graph_base64,
+        "graph2": graph_base641
+    }
