@@ -25,3 +25,6 @@ terraform.tfvars
 
 # Ignore output logs
 terraform.tf.log
+
+#Python virtual environment
+.venv

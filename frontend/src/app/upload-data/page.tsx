@@ -4,9 +4,14 @@ import { useState } from "react";
 import { CloudUpload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import Image from "next/image";
+
 export default function UploadPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<{ status: string; message?: string }>({ status: "" });
+  const [predictions, setPredictions] = useState<{ normal: number; malicious: number } | null>(null);
+
+  const [graph, setGraph] = useState<string | null>(null);
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +20,7 @@ export default function UploadPage() {
     }
   };
 
-  // Upload file to S3 using a presigned URL
+  // Upload file and get results
   const uploadFile = async () => {
     if (!selectedFile) {
       setUploadStatus({ status: "error", message: "Please select a file first." });
@@ -23,32 +28,25 @@ export default function UploadPage() {
     }
 
     try {
-      // Step 1: Get the presigned URL from the backend
-      const response = await fetch("/api/generate-presigned-url", {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("http://localhost:5000/upload", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          file_name: selectedFile.name,
-          file_type: selectedFile.type,
-        }),
+        body: formData,
       });
 
-      if (!response.ok) throw new Error("Failed to get presigned URL");
+      if (!response.ok) throw new Error("Failed to upload to Flask");
 
-      const { url } = await response.json();
+      const result = await response.json();
+      setUploadStatus({ status: "success", message: result.message });
 
-      // Step 2: Upload file to S3 using the presigned URL
-      const uploadResponse = await fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": selectedFile.type },
-        body: selectedFile,
+      // Store the predictions and graph
+      setPredictions({
+        normal: result.predictions.normal,
+        malicious: result.predictions.malicious
       });
-
-      if (uploadResponse.ok) {
-        setUploadStatus({ status: "success", message: "File uploaded successfully!" });
-      } else {
-        throw new Error("Failed to upload file to S3");
-      }
+      setGraph(result.graph ? `data:image/png;base64,${result.graph}` : null);
     } catch (error) {
       setUploadStatus({ status: "error", message: `Error: ${(error as Error).message}` });
     }
@@ -64,13 +62,6 @@ export default function UploadPage() {
         <div className="max-w-2xl mx-auto bg-[#071739] rounded-3xl p-12">
           <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center space-y-6">
             <CloudUpload className="w-16 h-16 text-white mb-4" />
-
-            <div className="text-center space-y-4">
-              <p className="text-red-500 font-semibold text-xl mb-2">NOTE</p>
-              <p className="text-white text-xl text-center max-w-md" style={{ fontFamily: "'Inter', sans-serif" }}>
-                This file must be in CSV format and match the NSL-KDD dataset structure.
-              </p>
-            </div>
 
             <p className="text-white text-xl mt-6 mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
               Please choose your file
@@ -117,6 +108,31 @@ export default function UploadPage() {
               </p>
             )}
           </form>
+
+          {/* Display Predictions Summary */}
+          {predictions && (
+            <div className="mt-6">
+              <h2 className="text-white text-2xl mb-4">Prediction Summary:</h2>
+              <div className="text-white text-lg flex gap-8">
+                <p>🟢 Normal: {predictions.normal}</p>
+                <p>🔴 Malicious: {predictions.malicious}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Display Graph */}
+          {graph && (
+            <div className="mt-6">
+              <h2 className="text-white text-2xl mb-4">Graph:</h2>
+              <Image 
+                src={graph} 
+                alt="Prediction Graph"
+                width={500} // Adjust as needed
+                height={300} // Adjust as needed
+                className="border border-gray-300 rounded-md"
+              />
+            </div>
+          )}
         </div>
       </main>
     </div>
