@@ -1,11 +1,14 @@
+import os
 import io
 import joblib
+import sys
 import numpy as np
 import pandas as pd
 import base64
 import matplotlib.pyplot as plt
 from collections import Counter
 
+sys.stdout.flush()
 # Column names for the dataset
 col_names = [
     "duration", "protocol_type", "service", "flag", "src_bytes", "dst_bytes", "land", 
@@ -20,10 +23,13 @@ col_names = [
 ]
 
 # Load pre-fitted encoders and scaler
-label_encoders = joblib.load("./preprocess/label_encoder.joblib")  # Dictionary with LabelEncoders
-onehot_encoder = joblib.load(".on/preprocess/onehot_encoder.joblib")  # Pre-fitted OneHotEncoder
-scaler = joblib.load("./preprocess/scaler.joblib")  # Pre-fitted StandardScaler
-columns_info = joblib.load("./preprocess/columns_info.joblib")  # Column order from training
+base_dir = os.path.dirname(os.path.abspath(__file__))  # path to backend/
+joblib_path = os.path.join(base_dir, "preprocess", "label_encoder.joblib")
+
+label_encoders = joblib.load(os.path.join(base_dir, "preprocess", "label_encoder.joblib"))  # Dictionary with LabelEncoders
+onehot_encoder = joblib.load(os.path.join(base_dir, "preprocess", "onehot_encoder.joblib"))  # Pre-fitted OneHotEncoder
+scaler = joblib.load(os.path.join(base_dir, "preprocess", "scaler.joblib"))  # Pre-fitted StandardScaler
+columns_info = joblib.load(os.path.join(base_dir, "preprocess", "columns_info.joblib"))  # Column order from training
 
 # Extract column information
 categorical_columns = columns_info["categorical_columns"]
@@ -33,16 +39,16 @@ def preprocess(file):
     # Load datasets
     try:
         df = pd.read_csv(file, header=None, names=col_names)
-        print("DataFrame loaded successfully.")
+        print("DataFrame loaded successfully.",flush=True)
     except Exception as e:
-        print(f"Error reading CSV: {str(e)}")
+        print(f"Error reading CSV: {str(e)}",flush=True)
 
     # Extract categorical and numerical features
     df_categorical = df[categorical_columns]
     df_numeric = df.drop(columns=categorical_columns + ["label"])
 
     # Encode categorical features using the loaded OneHotEncoder
-    print('here')
+    print('here',flush=True)
     df_categorical_enc = pd.DataFrame()
     for col_name in df_categorical.columns:
         # Map each category to its corresponding index
@@ -66,10 +72,10 @@ def preprocess(file):
                 df_combined[col] = 0
         df_combined = df_combined[scaler.feature_names_in_]
     except KeyError as e:
-        print(f"Error while combining features: Missing columns. {str(e)}")
+        print(f"Error while combining features: Missing columns. {str(e)}",flush=True)
         
     except Exception as e:
-        print(f"Unexpected error while combining features: {str(e)}")
+        print(f"Unexpected error while combining features: {str(e)}",flush=True)
         
 
     # Scale features using the loaded StandardScaler
@@ -78,7 +84,7 @@ def preprocess(file):
     return X_scaled
 
 def model(file):
-    model = joblib.load("backend/python/models/best_model_Random Forest.joblib")
+    model = joblib.load(os.path.join(base_dir, "models", "Random Forest.joblib"))
     predictions = model.predict(file)
 
      # Generate a DataFrame for better plotting (optional, based on output structure)
