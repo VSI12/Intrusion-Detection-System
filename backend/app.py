@@ -25,9 +25,9 @@ def upload_file():
 
          # Step 1: Preprocess the file
         processed_data = preprocess(upload_path)
-
-        # # Step 2: Run ML inference
-        # predictions = model(processed_data)
+        print("Data preprocessed successfully.")
+        # Step 2: Run ML inference
+        predictions = model(processed_data)
 
         return jsonify({
             "message": f"File {file.filename} processed successfully.",
