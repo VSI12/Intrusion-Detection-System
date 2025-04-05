@@ -124,6 +124,15 @@ variable "next_container_port" {
   type        = string
 }
 
+variable "flask_service" {
+  description = "The name of the Flask ECS service"
+  type        = string
+}
+variable "flask_container_port" {
+  description = "The name of the Flask container"
+  type        = string
+}
+
 variable "role_name" {
   description = "ECS service role name"
   type        = string
