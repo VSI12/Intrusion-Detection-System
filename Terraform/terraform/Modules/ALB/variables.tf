@@ -75,6 +75,7 @@ variable "flask_fargate_tg" {
 variable "flask_port" {
   description = "The port for the Flask Fargate target group"
   type        = string
+  default     = "5000"
 }
 
 variable "flask_protocol" {
