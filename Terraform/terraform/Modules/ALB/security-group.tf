@@ -31,7 +31,7 @@ resource "aws_security_group" "flask_alb_sg" {
     from_port       = 5000
     to_port         = 5000
     protocol        = "tcp"
-    security_groups = [aws_security_group.nextjs_service_sg.id] 
+    security_groups = [var.nextjs_service_sg] 
   }
 
   egress {
