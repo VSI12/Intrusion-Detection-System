@@ -51,7 +51,7 @@ variable "next_ecr_name" {
   type        = string
   default     = "nextjs-repo"
 }
-variable "flask_ecr" {
+variable "flask_ecr_name" {
   description = "The name of the Flask backend ECR repository"
   type        = string
 }
@@ -82,8 +82,31 @@ variable "alb_name_external" {
   description = "The name of the ALB"
   type        = string
 }
+#Internal ALB
+variable "alb_name_internal" {
+  description = "The name of the internal ALB"
+  type        = string
+}
 
+variable "internal_alb_port" {
+  description = "The port for the internal ALB"
+  type        = number
+  default     = 5000
+}
 
+variable "internal_alb_protocol" {
+  description = "The protocol for the internal ALB"
+  type        = string
+  default     = "HTTP"
+}
+variable "flask_fargate_listener" {
+  description = "The name of the Flask Fargate target group"
+  type        = string
+}
+variable "flask_fargate_tg" {
+  description = "The name of the Flask Fargate target group"
+  type        = string
+}
 #ELASTIC CONTAINER SERVICE
 variable "cluster_name" {
   description = "value of the ECS cluster name"
@@ -98,6 +121,15 @@ variable "nextjs_service" {
 
 variable "next_container_port" {
   description = "The name of the container"
+  type        = string
+}
+
+variable "flask_service" {
+  description = "The name of the Flask ECS service"
+  type        = string
+}
+variable "flask_container_port" {
+  description = "The name of the Flask container"
   type        = string
 }
 
