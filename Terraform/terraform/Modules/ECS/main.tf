@@ -50,7 +50,6 @@ resource "aws_ecs_service" "nextjs_service" {
     container_port   = var.next_container_port
   }
 
-  # depends_on = [var.nextjs_alb_listener_arn]
 }
 
 # Define IAM Role for ECS Service
@@ -141,7 +140,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "1024"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = aws_iam_role.flask_ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
@@ -177,4 +176,85 @@ resource "aws_ecs_service" "flask_service" {
     container_port   = var.flask_container_port
   }
 
+}
+
+# Define IAM Role for ECS Service
+resource "aws_iam_role" "flask_ecs_service_role" {
+  name = "flask-service-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+# Attach IAM Role Policy to ECS Service Role
+resource "aws_iam_role_policy" "flask_ecs_service_policy" {
+  name = "ecs-service-policy"
+  role = aws_iam_role.flask_ecs_service_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "ecr:GetAuthorizationToken"
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "${var.flask_ecr}" # Correctly reference the full ECR URI
+      },
+      {
+        Effect   = "Allow"
+        Action   = "ecs:UpdateService"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Define the execution role for ECS Task Definition
+resource "aws_iam_role" "flask_ecs_task_execution_role" {
+  name = "flask-ecs-task-execution-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+# Attach necessary policies to ECS Task Execution Role
+resource "aws_iam_role_policy_attachment" "flask_ecs_task_execution_policy" {
+  role       = aws_iam_role.flask_ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
