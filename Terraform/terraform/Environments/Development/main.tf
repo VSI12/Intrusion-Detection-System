@@ -39,6 +39,8 @@ module "alb" {
   vpc_id                  = module.vpc.vpc_id
   public_subnets          = module.vpc.public_subnet_ids
   private_subnets         = module.vpc.private_subnet_ids
+
+  nextjs_service_sg       = module.ecs.nextjs_service_sg
 }
 
 module "ecs" {
@@ -47,13 +49,24 @@ module "ecs" {
   cluster_name                = var.cluster_name
   vpc_id                      = module.vpc.vpc_id
   private_subnet_ids          = module.vpc.private_subnet_ids
+
   nextjs_alb_listener_arn     = module.alb.nextjs_alb_listener_arn
   nextjs_alb_sg               = module.alb.nextjs_alb_sg_id
+
+  flask_alb_sg                = module.alb.flask_alb_sg_id
+
+  next_ecr_name               = var.next_ecr_name
+  flask_ecr_name              = var.flask_ecr_name
   next_ecr                    = module.ecr.nextjs_repo_arn
+  flask_ecr                   = module.ecr.flask_repo_arn
+
   nextjs_service              = var.nextjs_service
   next_container_port         = var.next_container_port
+  flask_service              = var.flask_service
+  flask_container_port         = var.flask_container_port
+
   ecs_sg                      = module.alb.nextjs_alb_sg_id
   nextjs_alb_target_group_arn = module.alb.nextjs_alb_target_group_arn
+  flask_alb_target_group_arn = module.alb.flask_alb_target_group_arn
   role_name                   = var.role_name
-  next_ecr_name               = var.next_ecr_name
 }
