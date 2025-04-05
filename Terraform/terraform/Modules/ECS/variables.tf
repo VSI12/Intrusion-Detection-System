@@ -53,6 +53,10 @@ variable "nextjs_alb_sg" {
   description = "The security group ID for the NextJS ALB"
   type        = string
 }
+variable "flask_alb_sg" {
+  description = "The security group ID for the Flask ALB"
+  type        = string
+}
 
 variable "vpc_id" {
   description = "The VPC ID"
@@ -71,5 +75,10 @@ variable "flask_ecr" {
 
 variable "flask_ecr_name" {
   description = "The URL of the Flask backend ECR repository"
+  type        = string
+}
+
+variable "flask_service" {
+  description = "The name of the Flask ECS service"
   type        = string
 }
