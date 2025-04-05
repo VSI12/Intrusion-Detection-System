@@ -67,3 +67,19 @@ variable "flask_fargate_listener" {
   description = "The name of the Flask Fargate target group"
   type        = string
 }
+
+variable "flask_fargate_tg" {
+  description = "The name of the Flask Fargate target group"
+  type        = string
+}
+variable "flask_port" {
+  description = "The port for the Flask Fargate target group"
+  type        = string
+}
+
+variable "flask_protocol" {
+  description = "The protocol for the internal ALB"
+  type        = string
+  default     = "HTTP"
+}
+
