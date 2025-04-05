@@ -158,3 +158,23 @@ resource "aws_ecs_task_definition" "backend" {
     }
   ])
 }
+
+resource "aws_ecs_service" "flask_service" {
+  name                              = var.flask_service
+  cluster                           = aws_ecs_cluster.IDS_cluster.id
+  task_definition                   = aws_ecs_task_definition.backend.arn
+  desired_count                     = 2
+  health_check_grace_period_seconds = 60 # Set grace period to 60 seconds
+  launch_type                       = "FARGATE"
+
+  network_configuration {
+    subnets         = tolist([var.private_subnet_ids[2], var.private_subnet_ids[3]])
+    security_groups = [aws_security_group.flask_service_sg.id] # Replace with your security group ID                                        # Change based on your setup
+  }
+  load_balancer {
+    target_group_arn = var.flask_alb_target_group_arn
+    container_name   = var.flask_ecr_name
+    container_port   = var.flask_container_port
+  }
+
+}
