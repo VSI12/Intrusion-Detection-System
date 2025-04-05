@@ -17,7 +17,7 @@ module "vpc" {
 
 module "ecr" {
   source        = "../../modules/ecr"
-  flask_ecr     = var.flask_ecr
+  flask_ecr_name= var.flask_ecr_name
   next_ecr_name = var.next_ecr_name
   environment   = var.environment
 }
@@ -26,12 +26,19 @@ module "alb" {
   source                  = "../../modules/alb"
   environment             = var.environment
   alb_name_external       = var.alb_name_external
+  alb_name_internal       = var.alb_name_internal
   nextjs_fargate_tg       = var.nextjs_fargate_tg
   nextjs_fargate_listener = var.nextjs_fargate_listener
+  flask_fargate_listener = var.flask_fargate_listener
+  flask_fargate_tg = var.flask_fargate_tg
   external_alb_port       = var.external_alb_port
   external_alb_protocol   = var.external_alb_protocol
+  internal_alb_port       = var.internal_alb_port
+  internal_alb_protocol   = var.internal_alb_protocol
+
   vpc_id                  = module.vpc.vpc_id
   public_subnets          = module.vpc.public_subnet_ids
+  private_subnets         = module.vpc.private_subnet_ids
 }
 
 module "ecs" {
