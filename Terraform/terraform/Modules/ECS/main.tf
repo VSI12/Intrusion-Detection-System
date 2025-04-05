@@ -7,6 +7,7 @@ resource "aws_ecs_cluster" "IDS_cluster" {
   }
 }
 
+#ECS SERVICE FOR NEXTJS
 resource "aws_ecs_task_definition" "frontend" {
   family                   = "frontend-task"
   requires_compatibilities = ["FARGATE"]
@@ -22,8 +23,8 @@ resource "aws_ecs_task_definition" "frontend" {
       essential = true
       portMappings = [
         {
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = 3000
+          hostPort      = 3000
           protocol      = "tcp"
         }
       ]
@@ -51,7 +52,6 @@ resource "aws_ecs_service" "nextjs_service" {
 
   # depends_on = [var.nextjs_alb_listener_arn]
 }
-
 
 # Define IAM Role for ECS Service
 resource "aws_iam_role" "ecs_service_role" {
@@ -133,3 +133,4 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
