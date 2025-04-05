@@ -70,3 +70,16 @@ resource "aws_lb_listener" "flask_fargate" {
     Name        = var.flask_fargate_listener
   }
 }
+
+resource "aws_lb_target_group" "flask_fargate" {
+  name        = var.flask_fargate_tg
+  port        = var.flask_port
+  protocol    = var.flask_protocol
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+
+  tags = {
+    Environment = var.environment
+    Name        = var.flask_fargate_tg
+  }
+}
