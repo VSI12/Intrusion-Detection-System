@@ -40,3 +40,17 @@ resource "aws_lb_target_group" "nextjs_fargate" {
     Name        = var.nextjs_fargate_tg
   }
 }
+
+#Internal Load Balancer
+resource "aws_lb" "ids_alb_internal" {
+  name               = var.alb_name_internal
+  internal           = true
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.nextjs_alb_sg.id]
+  subnets            = var.private_subnets
+
+  tags = {
+    Environment = var.environment
+    Name        = var.alb_name_internal
+  }
+}
