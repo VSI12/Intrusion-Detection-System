@@ -63,3 +63,13 @@ variable "next_ecr_name" {
   description = "The name of the ECR repository"
   type        = string
 }
+
+variable "flask_ecr" {
+  description = "The name of the Flask backend ECR repository"
+  type        = string
+}
+
+variable "flask_ecr_name" {
+  description = "The URL of the Flask backend ECR repository"
+  type        = string
+}
