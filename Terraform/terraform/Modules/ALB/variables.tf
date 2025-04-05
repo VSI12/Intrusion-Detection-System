@@ -39,3 +39,16 @@ variable "public_subnets" {
   description = "List of public subnet IDs"
   type        = list(string)
 }
+
+
+#Internal Load Balancer
+variable "alb_name_internal" {
+  description = "The name of the internal ALB"
+  type        = string
+}
+
+variable "private_subnets" {
+  description = "List of private subnet IDs"
+  type        = list(string)
+}
+
