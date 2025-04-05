@@ -84,3 +84,8 @@ variable "flask_protocol" {
   default     = "HTTP"
 }
 
+variable "nextjs_service_sg" {
+  description = "The security group ID for the NextJS SG"
+  type        = string
+  
+}
