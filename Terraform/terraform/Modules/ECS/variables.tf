@@ -82,3 +82,13 @@ variable "flask_service" {
   description = "The name of the Flask ECS service"
   type        = string
 }
+
+variable "flask_container_port" {
+  description = "The port for the Flask container"
+  type        = string
+}
+
+variable "flask_alb_target_group_arn" {
+  description = "The ARN of the Flask Fargate target group"
+  type        = string
+}
