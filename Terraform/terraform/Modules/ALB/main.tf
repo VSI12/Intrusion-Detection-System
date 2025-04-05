@@ -54,3 +54,19 @@ resource "aws_lb" "ids_alb_internal" {
     Name        = var.alb_name_internal
   }
 }
+
+resource "aws_lb_listener" "flask_fargate" {
+  load_balancer_arn = aws_lb.ids_alb_internal.arn
+  port              = var.internal_alb_port
+  protocol          = var.internal_alb_protocol
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.flask_fargate.arn
+  }
+
+  tags = {
+    Environment = var.environment
+    Name        = var.flask_fargate_listener
+  }
+}
