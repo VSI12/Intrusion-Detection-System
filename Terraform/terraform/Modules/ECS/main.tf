@@ -135,7 +135,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
 }
 
 #ECS SERVICE FOR FLASK
-resource "aws_ecs_task_definition" "frontend" {
+resource "aws_ecs_task_definition" "backend" {
   family                   = "backend-task"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
