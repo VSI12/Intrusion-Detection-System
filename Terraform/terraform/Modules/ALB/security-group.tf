@@ -22,7 +22,7 @@ resource "aws_security_group" "nextjs_alb_sg" {
   }
 }
 
-resource "aws_security_group" "flask_alb" {
+resource "aws_security_group" "flask_alb_sg" {
   name        = "${var.alb_name_internal}-sg"
   description = "Security group for the internal ALB (Flask API)"
   vpc_id      = var.vpc_id
