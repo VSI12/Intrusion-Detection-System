@@ -30,7 +30,7 @@ resource "aws_lb_listener" "nextjs_fargate" {
 
 resource "aws_lb_target_group" "nextjs_fargate" {
   name        = var.nextjs_fargate_tg
-  port        = 8080
+  port        = 3000
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
