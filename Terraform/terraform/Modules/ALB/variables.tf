@@ -52,3 +52,18 @@ variable "private_subnets" {
   type        = list(string)
 }
 
+variable "internal_alb_port" {
+  description = "The port for the internal ALB"
+  type        = number
+  default     = 5000
+}
+
+variable "internal_alb_protocol" {
+  description = "The protocol for the internal ALB"
+  type        = string
+  default     = "HTTP"
+}
+variable "flask_fargate_listener" {
+  description = "The name of the Flask Fargate target group"
+  type        = string
+}
