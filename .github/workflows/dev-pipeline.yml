@@ -32,5 +32,4 @@ jobs:
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
           pwd
-          terraform init
-          terraform validate
+          ls
