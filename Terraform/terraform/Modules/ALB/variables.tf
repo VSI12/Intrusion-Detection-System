@@ -87,5 +87,5 @@ variable "flask_protocol" {
 variable "nextjs_service_sg" {
   description = "The security group ID for the NextJS SG"
   type        = string
-  
+
 }
