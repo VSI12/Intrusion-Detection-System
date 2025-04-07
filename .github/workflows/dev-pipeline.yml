@@ -33,3 +33,4 @@ jobs:
         run: |
           pwd
           terraform init
+          terraform validate
