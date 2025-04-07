@@ -29,8 +29,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init and Apply (Dev)
-        working-directory: ./Terraform
+        working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          cd terraform/Environments/Development
           terraform init
           terraform apply --auto-approve
