@@ -6,7 +6,7 @@
 crash.log
 
 # Terraform variable files (if they contain secrets)
-terraform.tfvars
+
 *.auto.tfvars
 
 # Ignore local Terraform directories
