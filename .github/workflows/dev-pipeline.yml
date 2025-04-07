@@ -31,5 +31,4 @@ jobs:
       - name: Terraform Init and Apply (Dev)
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          terraform init
-          terraform apply --auto-approve
+          pwd
