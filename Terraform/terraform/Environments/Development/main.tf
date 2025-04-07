@@ -1,11 +1,11 @@
 module "s3" {
-  source      = "../../modules/s3"
+  source      = "../../Modules/s3"
   bucket_name = var.bucket_name
   environment = var.environment
 }
 
 module "vpc" {
-  source               = "../../modules/vpc"
+  source               = "../../Modules/vpc"
   environment          = var.environment
   vpc_cidr_block       = var.vpc_cidr_block
   vpc_name             = var.vpc_name
@@ -16,14 +16,14 @@ module "vpc" {
 }
 
 module "ecr" {
-  source        = "../../modules/ecr"
+  source        = "../../Modules/ecr"
   flask_ecr_name= var.flask_ecr_name
   next_ecr_name = var.next_ecr_name
   environment   = var.environment
 }
 
 module "alb" {
-  source                  = "../../modules/alb"
+  source                  = "../../Modules/alb"
   environment             = var.environment
   alb_name_external       = var.alb_name_external
   alb_name_internal       = var.alb_name_internal
@@ -44,7 +44,7 @@ module "alb" {
 }
 
 module "ecs" {
-  source                      = "../../modules/ecs"
+  source                      = "../../Modules/ecs"
   environment                 = var.environment
   cluster_name                = var.cluster_name
   vpc_id                      = module.vpc.vpc_id
