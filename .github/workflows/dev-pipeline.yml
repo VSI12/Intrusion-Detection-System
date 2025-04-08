@@ -37,4 +37,5 @@ jobs:
         id: alb
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          echo "ALB_URL=$(terraform output -raw alb_dns_name)" >> $GITHUB_ENV
+          ALB_URL=$(terraform output -raw alb_dns_name)
+          echo "ALB_URL=$ALB_URL" >> $GITHUB_ENV
