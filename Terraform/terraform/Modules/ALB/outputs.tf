@@ -36,3 +36,9 @@ output "flask_alb_listener_arn" {
   description = "The ARN of the flask Fargate listener"
   value       = aws_lb_listener.flask_fargate.arn
 }
+
+
+output "alb_dns_name" {
+  value = aws_lb.ids_alb_external.dns_name
+  description = "The external DNS name of the ALB"
+}
