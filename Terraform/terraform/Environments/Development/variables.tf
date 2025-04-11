@@ -1,35 +1,16 @@
+#GENERAL CONFIGURATION
+
 variable "bucket_name" {
   description = "S3 Bucket Name"
   type        = string
 }
 
 variable "environment" {
-  description = "Deployment environment"
+  description = "Deployment environment (Development, staging, Production)"
   type        = string
-}
-
-variable "vpc_cidr_block" {
-  description = "CIDR block for the VPC"
-  type        = string
-
-}
-
-variable "vpc_name" {
-  description = "Name of the VPC"
-  type        = string
-}
-
-variable "public_subnet_cidrs" {
-  description = "List of public subnet CIDRs"
-  type        = list(string)
-}
-
-variable "private_subnet_cidrs" {
-  description = "List of private subnet CIDRs"
-  type        = list(string)
 }
 variable "availability_zones" {
-  description = "List of Availability Zones"
+  description = "List of AWS Availability Zones for subnets "
   type        = list(string)
 }
 variable "region" {
@@ -37,15 +18,36 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
-variable "ecr_name" {
-  description = "ECR Repository Name"
+variable "role_name" {
+  description = "ECS service execution role name"
   type        = string
-  default     = "ids-repo"
+  default     = "ecs-service-role"
 }
-variable "public_cidr" {
-  description = "public cidr"
+
+
+#NETWORKING
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for the VPC"
+  type        = string
+
+}
+variable "vpc_name" {
+  description = "Name of the VPC"
   type        = string
 }
+variable "public_subnet_cidrs" {
+  description = "List of CIDR blocks for public subnets"
+  type        = list(string)
+}
+variable "private_subnet_cidrs" {
+  description = "List of CIDR blocks for private subnets"
+  type        = list(string)
+}
+
+
+# Elastic Container Registry (ECR)
+
 variable "next_ecr_name" {
   description = "The name of the NextJS frontend ECR repository"
   type        = string
@@ -56,85 +58,94 @@ variable "flask_ecr_name" {
   type        = string
 }
 
+
 #APPLICATION LOAD BALANCER
-variable "nextjs_fargate_tg" {
-  description = "The name of the NextJS Fargate target group"
+
+#External ALB
+
+variable "alb_name_external" {
+  description = "Name of the external-facing ALB"
   type        = string
 }
-
-variable "nextjs_fargate_listener" {
-  description = "The name of the NextJS Fargate listener"
-  type        = string
-}
-
 variable "external_alb_port" {
-  description = "The port for the external ALB"
+  description = "Port to expose on the external ALB (default: 80)"
   type        = number
   default     = 80
 }
-
 variable "external_alb_protocol" {
-  description = "The protocol for the external ALB"
+  description = "Protocol used by the external ALB"
   type        = string
   default     = "HTTP"
 }
-variable "alb_name_external" {
-  description = "The name of the ALB"
+
+#Next.JS Target groups and Listener.
+
+variable "nextjs_fargate_tg" {
+  description = "Target group name for the Next.js Fargate service"
   type        = string
 }
-#Internal ALB
+variable "nextjs_fargate_listener" {
+  description = "Listener name for the Next.js Fargate service"
+  type        = string
+}
+
+# Internal ALB (for internal backend services)
+
 variable "alb_name_internal" {
-  description = "The name of the internal ALB"
+  description = "Name of the internal ALB for backend services"
   type        = string
 }
-
 variable "internal_alb_port" {
-  description = "The port for the internal ALB"
+  description = "Port to expose on the internal ALB (default: 80)"
   type        = number
-  default     = 5000
+  default     = 80
 }
-
 variable "internal_alb_protocol" {
-  description = "The protocol for the internal ALB"
+  description = "Protocol used by the internal ALB"
   type        = string
   default     = "HTTP"
+}
+
+#Flask Target groups and Listener.
+
+variable "flask_fargate_tg" {
+  description = "Target group name for the Flask Fargate service"
+  type        = string
 }
 variable "flask_fargate_listener" {
-  description = "The name of the Flask Fargate target group"
-  type        = string
-}
-variable "flask_fargate_tg" {
-  description = "The name of the Flask Fargate target group"
-  type        = string
-}
-#ELASTIC CONTAINER SERVICE
-variable "cluster_name" {
-  description = "value of the ECS cluster name"
+  description = "Listener name for the Flask Fargate service"
   type        = string
 }
 
+
+#ELASTIC CONTAINER SERVICE
+
+variable "cluster_name" {
+  description = "Name of the ECS Cluster"
+  type        = string
+}
+
+# Next.js Frontend Service
 
 variable "nextjs_service" {
-  description = "The name of the ECS service"
+  description = "ECS service name for the Next.js frontend"
+  type        = string
+}
+variable "next_container_port" {
+  description = "Container port exposed by the Next.js service"
   type        = string
 }
 
-variable "next_container_port" {
-  description = "The name of the container"
-  type        = string
-}
+
+# Flask Backend Service
 
 variable "flask_service" {
-  description = "The name of the Flask ECS service"
+  description = "ECS service name for the Flask backend"
   type        = string
 }
 variable "flask_container_port" {
-  description = "The name of the Flask container"
+  description = "Container port exposed by the Flask service"
   type        = string
 }
 
-variable "role_name" {
-  description = "ECS service role name"
-  type        = string
-  default     = "ecs-service-role"
-}
+
