@@ -32,8 +32,10 @@ jobs:
       - name: Terraform Init and Apply (Dev)
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          terraform init
-          terraform apply -auto-approve
+          #terraform init
+          #terraform apply -auto-approve
+
+          echo "Initializing Terraform..."
 
       - name: Get ALB DNS Output
         id: alb
