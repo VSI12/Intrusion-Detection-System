@@ -1,34 +1,34 @@
+#ENVIRONMENT CONFIG
+
 variable "environment" {
   description = "value of the environment"
   type        = string
 }
 
-variable "vpc_cidr_block" {
-  description = "value of the VPC CIDR block"
-  type        = string
-}
+
+#VPC CONFIGURATION
 
 variable "vpc_name" {
-  description = "value of the VPC name"
+  description = "Name of the VPC to be created"
+  type        = string
+}
+variable "vpc_cidr_block" {
+  description = "CIDR block for the VPC"
   type        = string
 }
 
-variable "public_subnet_cidrs" {
-  description = "List of public subnet CIDRs"
-  type        = list(string)
-}
 
-variable "private_subnet_cidrs" {
-  description = "List of private subnet CIDRs"
-  type        = list(string)
-}
+# SUBNET CONFIGURATION
 
 variable "availability_zones" {
-  description = "List of Availability Zones"
+  description = "List of AWS Availability Zones to use"
   type        = list(string)
 }
-
-variable "public_cidr" {
-  description = "CIDR nlock for the public subnet route table"
-  type        = string
+variable "public_subnet_cidrs" {
+  description = "List of CIDR blocks for public subnets"
+  type        = list(string)
+}
+variable "private_subnet_cidrs" {
+  description = "List of CIDR blocks for private subnets"
+  type        = list(string)
 }
