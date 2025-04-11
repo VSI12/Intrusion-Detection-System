@@ -1,10 +1,10 @@
-# 🧠 Flask Backend – Intrusion Detection System API
+#  Flask Backend – Intrusion Detection System API
 
 This is the backend service for the Intrusion Detection System (IDS) project, built with **Flask**. It provides a REST API for uploading network traffic files, preprocessing the data, running inference with a machine learning model, and returning the classification results.
 
 ---
 
-## 🚀 Features
+##  Features
 
 - Accepts CSV file uploads for intrusion detection
 - Preprocesses input using trained encoders and scalers
@@ -16,7 +16,7 @@ This is the backend service for the Intrusion Detection System (IDS) project, bu
 
 ---
 
-## 📦 Project Structure
+##  Project Structure
 ```
 ├── app.py # Main Flask API
 ├── preprocess.py # Data preprocessing and inference logic 
@@ -33,7 +33,7 @@ This is the backend service for the Intrusion Detection System (IDS) project, bu
 
 ---
 
-## ⚙️ Running Locally
+##  Running Locally
 
 > Make sure you have Python 3.9+ and `pip` installed.
 
