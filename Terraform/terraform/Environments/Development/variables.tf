@@ -45,6 +45,10 @@ variable "private_subnet_cidrs" {
   type        = list(string)
 }
 
+variable "public_cidr" {
+  description = "public cidr"
+  type        = string
+}
 
 # Elastic Container Registry (ECR)
 
