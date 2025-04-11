@@ -37,9 +37,9 @@ jobs:
 
           echo "Initializing Terraform..."
 
-      - name: Get ALB DNS Output
-        id: alb
-        working-directory: ./Terraform/terraform/Environments/Development
-        run: |
-          ALB_URL=$(terraform output -raw alb_dns_name)
-          echo "ALB_URL=$ALB_URL" >> $GITHUB_ENV
+      # - name: Get ALB DNS Output
+      #   id: alb
+      #   working-directory: ./Terraform/terraform/Environments/Development
+      #   run: |
+      #     ALB_URL=$(terraform output -raw alb_dns_name)
+      #     echo "ALB_URL=$ALB_URL" >> $GITHUB_ENV
