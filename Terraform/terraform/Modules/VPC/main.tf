@@ -94,3 +94,32 @@ resource "aws_vpc_endpoint" "ecr_api" {
     Environment = var.environment
   }
 }
+
+resource "aws_vpc_endpoint" "dkr-endpoint" {
+  vpc_id              = aws_vpc.ids-vpc.id
+  service_name        = "com.amazonaws.us-east-1.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids = [aws_subnet.private[0].id,aws_subnet.private[1].id]
+  security_group_ids  = [aws_security_group.vpc_endpoint_sg.id]
+  private_dns_enabled = true
+
+  tags = {
+    Name        = "${var.environment}-ECR-DKR-Endpoint"
+    Environment = var.environment
+  }
+}
+
+resource "aws_vpc_endpoint" "logs-endpoint" {
+  vpc_id              = aws_vpc.ids-vpc.id
+  service_name        = "com.amazonaws.us-east-1.logs"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids = [aws_subnet.private[0].id,aws_subnet.private[1].id]
+  security_group_ids  = [aws_security_group.vpc_endpoint_sg.id]
+  private_dns_enabled = true
+
+   tags = {
+    Name        = "${var.environment}-Cloudwatch-Endpoint"
+    Environment = var.environment
+  }
+}
+
