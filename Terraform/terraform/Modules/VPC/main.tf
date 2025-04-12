@@ -123,3 +123,14 @@ resource "aws_vpc_endpoint" "logs-endpoint" {
   }
 }
 
+resource "aws_vpc_endpoint" "s3-gateway" {
+  vpc_id            = aws_vpc.ids-vpc.id
+  service_name      = "com.amazonaws.us-east-1.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [aws_route_table.private.id]
+
+  tags = {
+    Name        = "${var.environment}-S3-Gateway-Endpoint"
+    Environment = var.environment
+  }
+}
