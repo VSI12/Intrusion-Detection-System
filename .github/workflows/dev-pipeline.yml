@@ -9,9 +9,12 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  dev-stage:
+  Terraform:
     runs-on: ubuntu-latest
     environment: dev
+    outputs:
+      flask_ecr_url: ${{ steps.ecr_output.outputs.flask_ecr_url }}
+      nextjs_ecr_url: ${{ steps.ecr_output.outputs.nextjs_ecr_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,14 +45,43 @@ jobs:
           ALB_URL=$(terraform output -raw alb_dns_name)
           echo "ALB_URL=$ALB_URL" >> $GITHUB_ENV
 
-      - name: Get ECR URLs
-        id: ecr
+      - name: Extract ECR URLs
+        id: ecr_output
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          FLASK_ECR_URL=$(terraform output -raw flask_repo_url) || { echo "Failed to get flask_repo_url"; exit 1; }
-          echo "FLASK_ECR_URL is: $FLASK_ECR_URL"
-          echo "FLASK_ECR_URL=$FLASK_ECR_URL" >> $GITHUB_ENV
+          echo "flask_ecr_url=$(terraform output -raw flask_repo_url)" >> $GITHUB_OUTPUT
+          echo "nextjs_ecr_url=$(terraform output -raw nextjs_repo_url)" >> $GITHUB_OUTPUT
 
-          NEXTJS_ECR_URL=$(terraform output -raw nextjs_repo_url) || { echo "Failed to get nextjs_repo_url"; exit 1; }
-          echo "NEXTJS_ECR_URL is: $NEXTJS_ECR_URL"
-          echo "NEXTJS_ECR_URL=$NEXTJS_ECR_URL" >> $GITHUB_ENV
+         
+  docker:
+    name: Build & Push Docker Images
+    needs: Terraform
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      FLASK_ECR_URL: ${{ needs.terraform.outputs.flask_ecr_url }}
+      NEXTJS_ECR_URL: ${{ needs.terraform.outputs.nextjs_ecr_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon Flask ECR repo
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $FLASK_ECR_URL
+          docker build -t flask-app ./frontend
+          docker tag flask-app:latest $FLASK_ECR_URL:latest
+          docker push $FLASK_ECR_URL:latest
+
+      - name: Build and Push Next.js App
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $NEXTJS_ECR_URL
+          docker build -t nextjs-app ./backend
+          docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
+          docker push $NEXTJS_ECR_URL:latest
