@@ -57,8 +57,8 @@ module "ecs" {
 
   next_ecr_name  = var.next_ecr_name
   flask_ecr_name = var.flask_ecr_name
-  next_ecr       = module.ecr.nextjs_repo_arn
-  flask_ecr      = module.ecr.flask_repo_arn
+  next_ecr       = module.ecr.nextjs_repo_url
+  flask_ecr      = module.ecr.flask_repo_url
 
   nextjs_service       = var.nextjs_service
   next_container_port  = var.next_container_port
