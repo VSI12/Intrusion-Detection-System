@@ -7,6 +7,11 @@ from preprocess import preprocess, model
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers=["Content-Type"])
 
+
+@app.route("/health")
+def health():
+    return "OK", 200
+
 @app.route('/upload', methods=['POST'])
 def upload_file(): 
     try:
