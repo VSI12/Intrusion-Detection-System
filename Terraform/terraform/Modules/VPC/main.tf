@@ -79,3 +79,18 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
+
+#VPC ENDPOINTS
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = aws_vpc.ids-vpc.id
+  service_name      = "com.amazonaws.us-east-1.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = [aws_subnet.private[0].id,aws_subnet.private[1].id]
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
+  private_dns_enabled = true
+
+  tags = {
+    Name        = "${var.environment}-ECR-API-Endpoint"
+    Environment = var.environment
+  }
+}
