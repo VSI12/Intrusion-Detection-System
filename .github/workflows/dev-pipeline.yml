@@ -59,8 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     env:
-      FLASK_ECR_URL: ${{ needs.terraform.outputs.flask_ecr_url }}
-      NEXTJS_ECR_URL: ${{ needs.terraform.outputs.nextjs_ecr_url }}
+      FLASK_ECR_URL: ${{ needs.Terraform.outputs.flask_ecr_url }}
+      NEXTJS_ECR_URL: ${{ needs.Terraform.outputs.nextjs_ecr_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
