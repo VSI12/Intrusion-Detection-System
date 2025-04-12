@@ -59,8 +59,8 @@ jobs:
     environment: dev
 
     env:
-      FLASK_ECR_URL: ${{ needs.terraform.outputs.flask_ecr_url }}
-      NEXTJS_ECR_URL: ${{ needs.terraform.outputs.nextjs_ecr_url }}
+      FLASK_ECR_URL: ${{ secrets.FLASK_ECR_URL }}
+      NEXTJS_ECR_URL: ${{ secrets.NEXTJS_ECR_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -73,22 +73,20 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Debug ECR URL
-        run: |
-          echo "FLASK_ECR_URL=${{ env.FLASK_ECR_URL }}"
-          echo "${{ needs.terraform.outputs.flask_ecr_url }}"
+        run: echo "FLASK_ECR_URL=${{ env.FLASK_ECR_URL }}"
     
-      # - name: Login to Amazon Flask ECR repo
-      #   run: |
-      #     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
+      - name: Login to Amazon Flask ECR repo
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
           
-      # - name: Build and Push Flask App
-      #   run: |
-      #     docker build -t flask-app ./frontend
-      #     docker tag flask-app:latest $FLASK_ECR_URL:latest
-      #     docker push $FLASK_ECR_URL:latest
+      - name: Build and Push Flask App
+        run: |
+          docker build -t flask-app ./frontend
+          docker tag flask-app:latest $FLASK_ECR_URL:latest
+          docker push $FLASK_ECR_URL:latest
 
-      # - name: Build and Push Next.js App
-      #   run: |
-      #     docker build -t nextjs-app ./backend
-      #     docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
-      #     docker push $NEXTJS_ECR_URL:latest
+      - name: Build and Push Next.js App
+        run: |
+          docker build -t nextjs-app ./backend
+          docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
+          docker push $NEXTJS_ECR_URL:latest
