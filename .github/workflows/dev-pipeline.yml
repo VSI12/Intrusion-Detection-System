@@ -9,7 +9,7 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  Terraform:
+  terraform:
     runs-on: ubuntu-latest
     environment: dev
     outputs:
@@ -49,18 +49,21 @@ jobs:
         id: ecr_output
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          echo "flask_ecr_url=$(terraform output -raw flask_repo_url)" >> $GITHUB_OUTPUT
-          echo "nextjs_ecr_url=$(terraform output -raw nextjs_repo_url)" >> $GITHUB_OUTPUT
+          FLASK_ECR_URL=$(terraform output -raw flask_repo_url) || { echo "Failed to get flask_repo_url"; exit 1; }
+          echo "flask_ecr_url=$FLASK_ECR_URL" >> $GITHUB_OUTPUT
 
+          NEXTJS_ECR_URL=$(terraform output -raw nextjs_repo_url) || { echo "Failed to get nextjs_repo_url"; exit 1; }
+          echo "nextjs_ecr_url=$NEXTJS_ECR_URL" >> $GITHUB_OUTPUT
          
-  docker:
+  ecr:
     name: Build & Push Docker Images
-    needs: Terraform
+    needs: terraform
     runs-on: ubuntu-latest
     environment: dev
+
     env:
-      FLASK_ECR_URL: ${{ needs.Terraform.outputs.flask_ecr_url }}
-      NEXTJS_ECR_URL: ${{ needs.Terraform.outputs.nextjs_ecr_url }}
+      FLASK_ECR_URL: ${{ needs.terraform.outputs.flask_ecr_url }}
+      NEXTJS_ECR_URL: ${{ needs.terraform.outputs.nextjs_ecr_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
