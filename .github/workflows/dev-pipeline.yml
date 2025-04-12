@@ -49,11 +49,8 @@ jobs:
         id: ecr_output
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
-          FLASK_ECR_URL=$(terraform output -raw flask_repo_url) || { echo "Failed to get flask_repo_url"; exit 1; }
-          echo "flask_ecr_url=$FLASK_ECR_URL" >> $GITHUB_OUTPUT
-
-          NEXTJS_ECR_URL=$(terraform output -raw nextjs_repo_url) || { echo "Failed to get nextjs_repo_url"; exit 1; }
-          echo "nextjs_ecr_url=$NEXTJS_ECR_URL" >> $GITHUB_OUTPUT
+          echo "flask_ecr_url=$(terraform output -raw flask_repo_url)" >> $GITHUB_OUTPUT
+          echo "nextjs_ecr_url=$(terraform output -raw nextjs_repo_url)" >> $GITHUB_OUTPUT
          
   ecr:
     name: Build & Push Docker Images
