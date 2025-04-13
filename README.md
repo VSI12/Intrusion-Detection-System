@@ -1,7 +1,7 @@
 # README.md
 
 ## Project Overview
-This project is a cloud-native, event-driven intrusion detection system built using AWS services. The system allows users to upload network logs, which are processed using machine learning models to detect anomalies and potential threats. The architecture leverages AWS Fargate for containerized workloads, S3 for storage, SQS for event-driven processing, and DynamoDB for result tracking.
+This project is a cloud-native,intrusion detection system built using AWS services. The system allows users to upload network logs, which are processed using machine learning models to detect anomalies and potential threats. The architecture leverages AWS Fargate for containerized workloads, S3 for storage, SQS for event-driven processing, and DynamoDB for result tracking.
 
 ## Features
 - **Next.js Frontend**: Serves the user interface and interacts with backend APIs.
