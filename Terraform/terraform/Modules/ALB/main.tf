@@ -78,6 +78,10 @@ resource "aws_lb_target_group" "flask_fargate" {
   target_type = "ip"
   vpc_id      = var.vpc_id
 
+  health_check {
+    path = "/health"
+  }
+
   tags = {
     Environment = var.environment
     Name        = var.flask_fargate_tg
