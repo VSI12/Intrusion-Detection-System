@@ -81,12 +81,12 @@ jobs:
           
       - name: Build and Push Flask App
         run: |
-          docker build -t flask-app ./frontend
+          docker build -t flask-app ./backend
           docker tag flask-app:latest $FLASK_ECR_URL:latest
           docker push $FLASK_ECR_URL:latest
 
       - name: Build and Push Next.js App
         run: |
-          docker build -t nextjs-app ./backend
+          docker build -t nextjs-app ./fackend
           docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
           docker push $NEXTJS_ECR_URL:latest
