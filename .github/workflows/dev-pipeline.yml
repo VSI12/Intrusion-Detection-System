@@ -87,6 +87,6 @@ jobs:
 
       - name: Build and Push Next.js App
         run: |
-          docker build -t nextjs-app ./fackend
+          docker build -t nextjs-app ./frontend
           docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
           docker push $NEXTJS_ECR_URL:latest
