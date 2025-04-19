@@ -73,4 +73,5 @@ module "ecs" {
   nextjs_alb_target_group_arn = module.alb.nextjs_alb_target_group_arn
   flask_alb_target_group_arn  = module.alb.flask_alb_target_group_arn
   role_name                   = var.role_name
+  internal_alb_dns_name = module.alb.internal_alb_dns_name
 }
