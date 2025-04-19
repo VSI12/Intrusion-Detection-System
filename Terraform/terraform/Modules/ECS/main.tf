@@ -154,6 +154,12 @@ resource "aws_ecs_task_definition" "backend" {
           protocol      = "tcp"
         }
       ]
+      environment = [
+        {
+          name = "NEXT_PUBLIC_API_URL"
+          value = "${var.internal_alb_dns_name}"
+        }
+      ]
     }
   ])
 }

@@ -103,3 +103,8 @@ variable "flask_repo_url" {
   description = "The URL of the Flask ECR repository"
   type        = string
 }
+
+variable "internal_alb_dns_name" {
+  description = "DNS name of the internal ALB"
+  type        = string
+}
