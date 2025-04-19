@@ -36,7 +36,7 @@ jobs:
         working-directory: ./Terraform/terraform/Environments/Development
         run: |
           terraform init
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
 
       - name: Get ALB DNS Output
         id: alb
