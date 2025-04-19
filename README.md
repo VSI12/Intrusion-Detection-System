@@ -30,7 +30,7 @@ This project is a cloud-native,intrusion detection system built using AWS servic
 ## Contribution Guidelines
 - Fork the repository.
 - Create a feature branch.
-- Submit a pull request with clear documentation.
+- Submit a pull request with clear documentation .
 
 ## License
 MIT License
