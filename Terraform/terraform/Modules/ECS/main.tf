@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "frontend" {
       portMappings = [
         {
           containerPort = 3000
-          hostPort      = 3000
+          hostPort      = 80
           protocol      = "tcp"
         }
       ]
