@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = jsonencode([
     {
       name      = "${var.next_ecr_name}"
-      image     = "${var.nextjs_repo_url}"
+      image     = "${var.nextjs_repo_url}:latest"
       essential = true
       portMappings = [
         {
@@ -151,7 +151,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       name      = "${var.flask_ecr_name}"
-      image     = "${var.flask_repo_url}"
+      image     = "${var.flask_repo_url}:latest"
       essential = true
       portMappings = [
         {
