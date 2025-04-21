@@ -38,20 +38,6 @@ jobs:
         run: |
           terraform init
           terraform apply -auto-approve
-
-      - name: Export Terraform Outputs to Environment
-        run: |
-          export NEXTJS_REPO=$(terraform output -raw nextjs_repo_url || echo "")
-          export FLASK_REPO=$(terraform output -raw flask_repo_url || echo "")
-      
-          if [ -z "$NEXTJS_REPO" ] || [ -z "$FLASK_REPO" ]; then
-            echo " Missing Terraform outputs. Did you run terraform apply?"
-            exit 1
-          fi
-      
-          echo "ECR_FRONTEND_URL=$NEXTJS_REPO" >> $GITHUB_ENV
-          echo "ECR_BACKEND_URL=$FLASK_REPO" >> $GITHUB_ENV
-        
         
          
   
