@@ -1,0 +1,46 @@
+name: Frontend Dev Pipeline
+description: CI/CD pipeline for the NextJS Frontend application
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-dev.yml'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Download ECR URLs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ecr-urls
+
+      - name: Read frontend ECR URL
+        id: ecr
+        run: echo "url=$(cat terraform/ecr-frontend.txt)" >> $GITHUB_OUTPUT
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
+
+      - name: Build Docker image
+        run: |
+          docker build -t frontend-app ./frontend
+          docker tag frontend-app:latest ${{ steps.ecr.outputs.url }}:latest
+
+      - name: Push to ECR
+        run: |
+          docker push ${{ steps.ecr.outputs.url }}:latest
