@@ -39,24 +39,19 @@ jobs:
           terraform init
           terraform apply -auto-approve
 
-      - name: Extract ECR URLs for Frontend and Backend
-        id: extract-ecr
+      - name: Export Terraform Outputs to Environment
         run: |
-          echo "ECR_FRONTEND_URL=$(terraform output -raw nextjs_repo_url)" >> $GITHUB_ENV
-          echo "ECR_BACKEND_URL=$(terraform output -raw flask_repo_url)" >> $GITHUB_ENV
-  
-      - name: Save ECR URLs to files
-        run: |
-          echo $ECR_FRONTEND_URL > terraform/ecr-frontend.txt
-          echo $ECR_BACKEND_URL > terraform/ecr-backend.txt
+          export NEXTJS_REPO=$(terraform output -raw nextjs_repo_url || echo "")
+          export FLASK_REPO=$(terraform output -raw flask_repo_url || echo "")
+      
+          if [ -z "$NEXTJS_REPO" ] || [ -z "$FLASK_REPO" ]; then
+            echo " Missing Terraform outputs. Did you run terraform apply?"
+            exit 1
+          fi
+      
+          echo "ECR_FRONTEND_URL=$NEXTJS_REPO" >> $GITHUB_ENV
+          echo "ECR_BACKEND_URL=$FLASK_REPO" >> $GITHUB_ENV
         
-      - name: Upload ECR URLs as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ecr-urls
-          path: |
-            terraform/ecr-frontend.txt
-            terraform/ecr-backend.txt
         
          
   
