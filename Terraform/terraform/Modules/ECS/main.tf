@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "frontend" {
       ]
       environment = [
         {
-          name = "NEXT_PUBLIC_API_URL"
+          name = "INTERNAL_FLASK_API"
           value = "${var.internal_alb_dns_name}"
         }
       ]
