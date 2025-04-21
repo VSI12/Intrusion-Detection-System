@@ -1,0 +1,62 @@
+name: Terraform Dev Pipeline
+description: CI/CD pipeline for the AWS development infrastructure
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '.github/workflows/terraform-dev.yml'
+      - './Terraform/terraform/Environments/Development/**'
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+          terraform_wrapper: false
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init and Apply (Dev)
+        working-directory: ./Terraform/terraform/Environments/Development
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
+      - name: Extract ECR URLs for Frontend and Backend
+        id: extract-ecr
+        run: |
+          echo "ECR_FRONTEND_URL=$(terraform output -raw frontend_ecr_url)" >> $GITHUB_ENV
+          echo "ECR_BACKEND_URL=$(terraform output -raw backend_ecr_url)" >> $GITHUB_ENV
+  
+          - name: Save ECR URLs to files
+          run: |
+            echo $ECR_FRONTEND_URL > terraform/ecr-frontend.txt
+            echo $ECR_BACKEND_URL > terraform/ecr-backend.txt
+        
+      - name: Upload ECR URLs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecr-urls
+          path: |
+            terraform/ecr-frontend.txt
+            terraform/ecr-backend.txt
+        
+         
+  
