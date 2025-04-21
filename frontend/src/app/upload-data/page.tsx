@@ -31,7 +31,7 @@ export default function UploadPage() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+      const response = await fetch("http://internal-IDS-ALB-Internal-309717885.us-east-1.elb.amazonaws.com/upload", {
         method: "POST",
         body: formData,
       });
