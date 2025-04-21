@@ -1,4 +1,5 @@
 name: Dev Pipeline
+description: CI/CD pipeline for the development environment
 
 on:
   push:
