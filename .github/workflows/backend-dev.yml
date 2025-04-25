@@ -1,0 +1,38 @@
+name: Frontend Dev Pipeline
+description: CI/CD pipeline for the development Flask backend application
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-dev.yml'
+
+jobs:
+  Backend:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    environment: dev
+
+    env:
+      NEXTJS_ECR_URL: ${{ secrets.FLASK_ECR_URL }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+    
+      - name: Login to Amazon Flask ECR repo
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
+          
+      - name: Build and Push Flask App
+        run: |
+          docker build -t flask-app ./backend
+          docker tag flask-app:latest $FLASK_ECR_URL:latest
+          docker push $FLASK_ECR_URL:latest
