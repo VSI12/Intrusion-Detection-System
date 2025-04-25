@@ -1,5 +1,5 @@
 name: Frontend Dev Pipeline
-description: CI/CD pipeline for the NextJS Frontend application
+description: CI/CD pipeline for the development NextJS Frontend application
 
 on:
   push:
@@ -8,39 +8,31 @@ on:
       - '.github/workflows/frontend-dev.yml'
 
 jobs:
-  build-and-push:
+  Frontend:
+    name: Build & Push Docker Images
     runs-on: ubuntu-latest
     environment: dev
 
+    env:
+      NEXTJS_ECR_URL: ${{ secrets.NEXTJS_ECR_URL }}
+      AWS_REGION: us-east-1
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Download ECR URLs artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ecr-urls
-
-      - name: Read frontend ECR URL
-        id: ecr
-        run: echo "url=$(cat terraform/ecr-frontend.txt)" >> $GITHUB_OUTPUT
-
-      - name: Log in to Amazon ECR
+          aws-region: ${{ env.AWS_REGION }}
+    
+      - name: Login to Amazon Flask ECR repo
         run: |
-          aws ecr get-login-password | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
-
-      - name: Build Docker image
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
+          
+      - name: Build and Push Next.js App
         run: |
-          docker build -t frontend-app ./frontend
-          docker tag frontend-app:latest ${{ steps.ecr.outputs.url }}:latest
-
-      - name: Push to ECR
-        run: |
-          docker push ${{ steps.ecr.outputs.url }}:latest
+          docker build -t nextjs-app ./frontend
+          docker tag nextjs-app:latest $NEXTJS_ECR_URL:latest
+          docker push $NEXTJS_ECR_URL:latest
