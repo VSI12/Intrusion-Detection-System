@@ -16,7 +16,7 @@ jobs:
     environment: dev
 
     env:
-      NEXTJS_ECR_URL: ${{ secrets.FLASK_ECR_URL }}
+      FLASK_ECR_URL: ${{ secrets.FLASK_ECR_URL }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: Checkout code
