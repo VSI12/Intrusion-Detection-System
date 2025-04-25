@@ -1,9 +1,3 @@
-module "s3" {
-  source      = "../../Modules/S3"
-  bucket_name = var.bucket_name
-  environment = var.environment
-}
-
 module "vpc" {
   source               = "../../Modules/VPC"
   environment          = var.environment
