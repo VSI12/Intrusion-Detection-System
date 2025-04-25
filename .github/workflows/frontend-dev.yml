@@ -15,7 +15,7 @@ jobs:
 
     env:
       NEXTJS_ECR_URL: ${{ secrets.NEXTJS_ECR_URL }}
-      AWS_REGION: us-east-1
+      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
