@@ -1,4 +1,4 @@
-name: Frontend Dev Pipeline
+name: Backend Dev Pipeline
 description: CI/CD pipeline for the development Flask backend application
 
 on:
