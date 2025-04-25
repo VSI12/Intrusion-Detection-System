@@ -3,6 +3,8 @@ description: CI/CD pipeline for the development NextJS Frontend application
 
 on:
   push:
+    branches:
+      - dev
     paths:
       - 'frontend/**'
       - '.github/workflows/frontend-dev.yml'

@@ -3,6 +3,8 @@ description: CI/CD pipeline for the development Flask backend application
 
 on:
   push:
+    branches:
+      - dev
     paths:
       - 'backend/**'
       - '.github/workflows/backend-dev.yml'
