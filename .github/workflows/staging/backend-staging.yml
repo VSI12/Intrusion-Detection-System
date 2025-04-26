@@ -16,7 +16,7 @@ jobs:
     environment: staging
 
     env:
-      FLASK_ECR_URL: ${{ secrets.FLASK_STAGING_ECR_URL }}
+      FLASK_ECR_URL: ${{ secrets.FLASK_ECR_URL }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ECS_CLUSTER_NAME: ${{ secrets.STAGING_ECS_CLUSTER_NAME }}
       ECS_SERVICE_NAME: ${{ secrets.FLASK_ECS_SERVICE_NAME }}
