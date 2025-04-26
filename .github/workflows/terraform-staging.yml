@@ -38,18 +38,3 @@ jobs:
         run: |
           terraform init
           terraform apply -auto-approve
-
-  trigger-production:
-    name: Request Production Deployment
-    needs: terraform
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      # Manual approval before running
-      deployment_branch_policy:
-        protected_branches: true
-    steps:
-      - name: Await Production Approval
-        run: echo "Ready for production deployment. Approve manually."
-         
-  
