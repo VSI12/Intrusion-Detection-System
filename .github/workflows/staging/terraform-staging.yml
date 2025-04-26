@@ -1,0 +1,55 @@
+name: Terraform Staging Pipeline
+description: CI/CD pipeline for the AWS development infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/terraform-staging.yml'
+      - './Terraform/terraform/Environments/Staging/**'
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+          terraform_wrapper: false
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init and Apply (Dev)
+        working-directory: ./Terraform/terraform/Environments/Development
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
+  trigger-production:
+    name: Request Production Deployment
+    needs: terraform
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      # Manual approval before running
+      deployment_branch_policy:
+        protected_branches: true
+    steps:
+      - name: Await Production Approval
+        run: echo "Ready for production deployment. Approve manually."
+         
+  
