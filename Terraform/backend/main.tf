@@ -48,6 +48,24 @@ resource "aws_dynamodb_table" "terraform_locks_dev" {
     prevent_destroy = true # Prevents the DynamoDB table from being destroyed
   }
 }
+resource "aws_dynamodb_table" "terraform_locks_staging" {
+  name         = var.backend_table_staging
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    Environment = "staging"
+  }
+
+  lifecycle {
+    prevent_destroy = true # Prevents the DynamoDB table from being destroyed
+  }
+}
 resource "aws_dynamodb_table" "terraform_locks_prod" {
   name         = var.backend_table_prod
   billing_mode = "PAY_PER_REQUEST"

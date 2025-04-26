@@ -11,3 +11,7 @@ variable "backend_table_prod" {
   description = "DynamoDB table to store the locks for the tfstate files"
   type        = string
 }
+variable "backend_table_staging" {
+  description = "DynamoDB table to store the locks for the tfstate files"
+  type        = string
+}
