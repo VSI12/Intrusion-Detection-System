@@ -1,10 +1,4 @@
 #GENERAL CONFIGURATION
-
-variable "bucket_name" {
-  description = "S3 Bucket Name"
-  type        = string
-}
-
 variable "environment" {
   description = "Deployment environment (Development, staging, Production)"
   type        = string

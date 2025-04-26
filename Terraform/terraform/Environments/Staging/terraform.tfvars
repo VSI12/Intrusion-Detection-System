@@ -7,8 +7,8 @@ private_subnet_cidrs = ["10.2.3.0/24", "10.2.4.0/24", "10.2.5.0/24", "10.2.6.0/2
 
 availability_zones = ["us-east-1a", "us-east-1b"]
 public_cidr        = "0.0.0.0/0"
-flask_ecr_name     = "flask-repo-Staging"
-next_ecr_name      = "nextjs-repo-Staging"
+flask_ecr_name     = "flask-repo-staging"
+next_ecr_name      = "nextjs-repo-staging"
 
 alb_name_external       = "IDS-ALB-External-Staging"
 alb_name_internal       = "IDS-ALB-Internal-Staging"
