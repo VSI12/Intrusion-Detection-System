@@ -15,7 +15,7 @@ env:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: staging
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

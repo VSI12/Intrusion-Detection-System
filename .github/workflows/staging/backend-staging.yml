@@ -1,0 +1,65 @@
+name: Backend Staging Pipeline
+description: CI/CD pipeline for the Staging Flask backend application
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-staging.yml'
+
+jobs:
+  backend-staging:
+    name: Build, Push & Deploy Flask Backend (Staging)
+    runs-on: ubuntu-latest
+    environment: staging
+
+    env:
+      FLASK_ECR_URL: ${{ secrets.FLASK_STAGING_ECR_URL }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ECS_CLUSTER_NAME: ${{ secrets.STAGING_ECS_CLUSTER_NAME }}
+      ECS_SERVICE_NAME: ${{ secrets.FLASK_ECS_SERVICE_NAME }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          
+      - name: Build and Push Flask App
+        run: |
+          docker build -t flask-app ./backend
+          docker tag flask-app:latest $FLASK_ECR_URL:staging
+          docker push $FLASK_ECR_URL:staging
+
+      - name: Force New Deployment on ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER_NAME \
+            --service $ECS_SERVICE_NAME \
+            --force-new-deployment
+
+  trigger-production:
+    name: Request Production Deployment
+    needs: backend-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      
+      deployment_branch_policy:
+        protected_branches: true
+    steps:
+      - name: Await Production Approval
+        run: echo "Ready for production deployment. Approve manually."
+
+      
