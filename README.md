@@ -23,7 +23,7 @@ This project is a cloud-native,intrusion detection system built using AWS servic
 - Docker installed
 - Node.js & Python installed
 
-###Infrastructure deployment (Terraform)
+### Infrastructure deployment (Terraform)
 -- Go into the terraform folder, the details steps to provision the AWS infrastructure are outlined there.
 
 
