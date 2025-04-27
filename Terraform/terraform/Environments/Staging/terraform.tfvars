@@ -20,8 +20,8 @@ external_alb_port       = 80
 external_alb_protocol   = "HTTP"
 
 #ECS
-cluster_name         = "ids-development-cluster-Staging"
-nextjs_service       = "ids-development-nextjs-service-Staging"
+cluster_name         = "ids-Staging-cluster"
+nextjs_service       = "ids-Staging-nextjs-service"
 next_container_port  = 3000
-flask_service        = "ids-development-flask-service-Staging"
+flask_service        = "ids-Staging-flask-service"
 flask_container_port = 5000
