@@ -68,7 +68,7 @@ resource "aws_ecs_service" "nextjs_service" {
 
 # Define IAM Role for ECS Service
 resource "aws_iam_role" "ecs_service_role" {
-  name = var.role_name
+  name = "${var.role_name}-${var.environment}-ecs-service-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -90,7 +90,8 @@ resource "aws_iam_role" "ecs_service_role" {
 
 # Attach IAM Role Policy to ECS Service Role
 resource "aws_iam_role_policy" "ecs_service_policy" {
-  name = "ecs-service-policy"
+  name =  "${var.role_name}-${var.environment}-ecs-service-policy"
+
   role = aws_iam_role.ecs_service_role.id
 
   policy = jsonencode({
@@ -131,7 +132,7 @@ resource "aws_iam_role_policy" "ecs_service_policy" {
 
 # Define the execution role for ECS Task Definition
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecs-task-execution-role"
+  name = "${var.role_name}-${var.environment}-ecs-task-execution-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -199,7 +200,8 @@ resource "aws_ecs_service" "flask_service" {
 
 # Define IAM Role for ECS Service
 resource "aws_iam_role" "flask_ecs_service_role" {
-  name = "flask-service-role"
+  name = "${var.role_name}-${var.environment}-flask-service-role"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -216,7 +218,7 @@ resource "aws_iam_role" "flask_ecs_service_role" {
 
 # Attach IAM Role Policy to ECS Service Role
 resource "aws_iam_role_policy" "flask_ecs_service_policy" {
-  name = "ecs-service-policy"
+  name = "${var.role_name}-${var.environment}-flask-service-policy"
   role = aws_iam_role.flask_ecs_service_role.id
 
   policy = jsonencode({
@@ -257,7 +259,8 @@ resource "aws_iam_role_policy" "flask_ecs_service_policy" {
 
 # Define the execution role for ECS Task Definition
 resource "aws_iam_role" "flask_ecs_task_execution_role" {
-  name = "flask-ecs-task-execution-role"
+  name = "${var.role_name}-${var.environment}-flask-ecs-task-execution-role"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
