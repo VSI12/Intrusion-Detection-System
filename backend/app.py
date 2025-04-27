@@ -22,7 +22,7 @@ def upload_file():
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
         
-        # Save the file to /tmp
+        # Save the file to /tmp dir within fargate
         upload_path = os.path.join('/tmp', file.filename)
         os.makedirs('/tmp', exist_ok=True)
         file.save(upload_path)

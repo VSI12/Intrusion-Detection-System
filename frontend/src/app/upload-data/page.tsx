@@ -127,8 +127,8 @@ export default function UploadPage() {
               <Image 
                 src={graph} 
                 alt="Prediction Graph"
-                width={500} // Adjust as needed
-                height={300} // Adjust as needed
+                width={500} 
+                height={300} 
                 className="border border-gray-300 rounded-md"
               />
             </div>
