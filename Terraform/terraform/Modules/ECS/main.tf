@@ -9,7 +9,7 @@ resource "aws_ecs_cluster" "IDS_cluster" {
 
 #ECS SERVICE FOR NEXTJS
 resource "aws_ecs_task_definition" "frontend" {
-  family                   = "frontend-task"
+  family                   = "frontend-task-${var.environment}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.fargate_cpu
@@ -155,7 +155,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
 
 #ECS SERVICE FOR FLASK
 resource "aws_ecs_task_definition" "backend" {
-  family                   = "backend-task"
+  family                   = "backend-task-${var.environment}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "256"
