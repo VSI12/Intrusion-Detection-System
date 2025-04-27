@@ -114,3 +114,7 @@ variable "fargate_cpu" {
   type        = string
 }
 
+variable "fargate_memory" {
+  description = "The memory for the Fargate task"
+  type        = string
+}
