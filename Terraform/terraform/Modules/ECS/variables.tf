@@ -108,3 +108,13 @@ variable "internal_alb_dns_name" {
   description = "DNS name of the internal ALB"
   type        = string
 }
+
+variable "fargate_cpu" {
+  description = "The CPU units for the Fargate task"
+  type        = string
+}
+
+variable "fargate_memory" {
+  description = "The memory for the Fargate task"
+  type        = string
+}
