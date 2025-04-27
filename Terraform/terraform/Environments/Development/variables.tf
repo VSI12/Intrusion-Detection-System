@@ -152,4 +152,14 @@ variable "flask_container_port" {
   type        = string
 }
 
+variable "fargate_cpu" {
+  description = "CPU units for Fargate tasks"
+  type        = string
+  default     = "256"
+}
 
+variable "fargate_memory" {
+  description = "Memory for Fargate tasks"
+  type        = string
+  default     = "512"
+}
