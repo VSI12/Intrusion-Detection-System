@@ -69,6 +69,9 @@ module "ecs" {
   flask_service        = var.flask_service
   flask_container_port = var.flask_container_port
 
+  fargate_cpu = var.fargate_cpu
+  fargate_memory = var.fargate_memory
+
   ecs_sg                      = module.alb.nextjs_alb_sg_id
   nextjs_alb_target_group_arn = module.alb.nextjs_alb_target_group_arn
   flask_alb_target_group_arn  = module.alb.flask_alb_target_group_arn
