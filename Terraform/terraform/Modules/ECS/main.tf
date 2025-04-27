@@ -36,6 +36,10 @@ resource "aws_ecs_task_definition" "frontend" {
       ]
     }
   ])
+
+  tags = {
+    environment = var.environment
+  }
 }
 
 resource "aws_ecs_service" "nextjs_service" {
@@ -56,6 +60,10 @@ resource "aws_ecs_service" "nextjs_service" {
     container_port   = var.next_container_port
   }
 
+  tags = {
+    name        = var.nextjs_service
+    environment = var.environment
+  }
 }
 
 # Define IAM Role for ECS Service
@@ -73,6 +81,11 @@ resource "aws_iam_role" "ecs_service_role" {
       }
     ]
   })
+
+  tags = {
+    Name        = var.role_name
+    environment = var.environment
+  }
 }
 
 # Attach IAM Role Policy to ECS Service Role
