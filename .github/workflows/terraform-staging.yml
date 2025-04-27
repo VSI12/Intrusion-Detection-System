@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - '.github/workflows/terraform-staging.yml'
-      - './Terraform/terraform/Environments/Staging/**'
+      - 'Terraform/terraform/Environments/Staging/**'
 
 env:
   AWS_REGION: us-east-1
