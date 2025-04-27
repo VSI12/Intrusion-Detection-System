@@ -39,8 +39,8 @@ jobs:
       - name: Build and Push Flask App
         run: |
           docker build -t flask-app ./backend
-          docker tag flask-app:latest $FLASK_ECR_URL:staging
-          docker push $FLASK_ECR_URL:staging
+          docker tag flask-app:latest $FLASK_ECR_URL:latest
+          docker push $FLASK_ECR_URL:latest
 
       - name: Force New Deployment on ECS
         run: |
