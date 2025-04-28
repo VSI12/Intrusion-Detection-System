@@ -5,7 +5,7 @@ I used **Terraform** to provision and manage cloud resources across three isolat
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Directory Structure](#Directory-Structure)
 - [Modules](#modules)
@@ -103,16 +103,54 @@ Creates the backend infrastructure in AWS.
 
 **Now your remote backend configuration is complete**
 
-## Main Infrastructure 
+# Main Infrastructure 
+
+This folder contains the complete Infrastructure as Code (IaC) setup for deploying the Intrusion Detection System (IDS) to AWS using Terraform.
+
+## Environment Overview
+
+Each environment (`Development`, `Staging`, `Production`) has:
+
+- `main.tf`: Imports modules and wires resources together.
+- `terraform.tfvars`: Defines environment-specific values like VPC CIDRs, subnet CIDRs, cluster names, etc.
+- `variables.tfvars`
+
+Example `terraform.tfvars`:
+
+```hcl
+vpc_cidr = "10.0.0.0/16"
+ecs_cluster_name = "ids-cluster-dev"
+```
+**Note: You can leave the default values as they are unless you wish to use a different naming convention.** 
+
+## Environment setup
+
+**NOTE: Perform the following steps for each Environment**
+
+### **Step 1:** Navigate to the Environment directory 
+
+Navigate into the `Environments` directory and then select the environment you wish to deploy (we'll be using the `Development` environment)
+
+```bash
+cd Terraform/terraform/Environments/Development
+```
+
+### **Step 2:** Update the State resources
+In the previous steps, the name of the S3 bucket was changed. Now we're going to update the backend configuration of this environment to use the S3 bucket.
+
+Open `main.tf` file and edit the `bucket` variable, using the bucket name you selected in the backend configuration. As such:
+```hcl
+bucket = "your-unique-terraform-state-bucket"
+```
 
 
+---
+**WE WILL NOT BE MANUALLY PROVISIONING THE ENVIRONMENT RESOURCES, THAT WILL BE HANDLED BY THE CI/CD PIPELINE**
 
 ##  Best Practices Followed
-
 - **Modularization:** Resources are split into reusable modules.
 - **Environment Isolation:** Each environment manages its own VPC, ALB, ECS, S3, and IAM resources.
 - **Remote State Management:** Centralized state management with locking using S3 and DynamoDB.
-- **Security:** IAM roles use the principle of least privilege.
 - **Version Control:** Terraform code managed under GitHub, following GitOps principles.
 - **CI/CD:** Infrastructure changes automatically deployed with GitHub Actions (manual approvals for staging and prod).
 
