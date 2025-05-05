@@ -39,10 +39,10 @@ output "flask_alb_listener_arn" {
 
 
 output "alb_dns_name" {
-  value = aws_lb.ids_alb_external.dns_name
+  value       = aws_lb.ids_alb_external.dns_name
   description = "The external DNS name of the ALB"
 }
 output "internal_alb_dns_name" {
-  value = aws_lb.ids_alb_internal.dns_name
+  value       = aws_lb.ids_alb_internal.dns_name
   description = "The DNS name of the internal ALB"
 }

@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "frontend" {
       ]
       environment = [
         {
-          name = "INTERNAL_FLASK_API"
+          name  = "INTERNAL_FLASK_API"
           value = "${var.internal_alb_dns_name}"
         }
       ]
@@ -90,7 +90,7 @@ resource "aws_iam_role" "ecs_service_role" {
 
 # Attach IAM Role Policy to ECS Service Role
 resource "aws_iam_role_policy" "ecs_service_policy" {
-  name =  "${var.role_name}-${var.environment}-ecs-service-policy"
+  name = "${var.role_name}-${var.environment}-ecs-service-policy"
 
   role = aws_iam_role.ecs_service_role.id
 

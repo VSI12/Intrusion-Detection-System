@@ -96,7 +96,7 @@ variable "flask_alb_target_group_arn" {
 variable "nextjs_repo_url" {
   description = "The URL of the NextJS ECR repository"
   type        = string
-  
+
 }
 
 variable "flask_repo_url" {

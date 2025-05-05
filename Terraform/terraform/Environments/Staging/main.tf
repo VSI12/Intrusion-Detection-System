@@ -10,10 +10,10 @@ module "vpc" {
 }
 
 module "ecr" {
-  source        = "../../Modules/ECR"
-  flask_ecr_name= var.flask_ecr_name
-  next_ecr_name = var.next_ecr_name
-  environment   = var.environment
+  source         = "../../Modules/ECR"
+  flask_ecr_name = var.flask_ecr_name
+  next_ecr_name  = var.next_ecr_name
+  environment    = var.environment
 }
 
 module "alb" {
@@ -38,11 +38,11 @@ module "alb" {
 }
 
 module "ecs" {
-  source                      = "../../Modules/ECS"
-  environment                 = var.environment
-  cluster_name                = var.cluster_name
-  vpc_id                      = module.vpc.vpc_id
-  private_subnet_ids          = module.vpc.private_subnet_ids
+  source             = "../../Modules/ECS"
+  environment        = var.environment
+  cluster_name       = var.cluster_name
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
 
   nextjs_alb_listener_arn = module.alb.nextjs_alb_listener_arn
   nextjs_alb_sg           = module.alb.nextjs_alb_sg_id
@@ -54,7 +54,7 @@ module "ecs" {
   next_ecr       = module.ecr.nextjs_repo_arn
   flask_ecr      = module.ecr.flask_repo_arn
 
-  flask_repo_url = module.ecr.flask_repo_url
+  flask_repo_url  = module.ecr.flask_repo_url
   nextjs_repo_url = module.ecr.nextjs_repo_url
 
 
@@ -63,12 +63,12 @@ module "ecs" {
   flask_service        = var.flask_service
   flask_container_port = var.flask_container_port
 
-  fargate_cpu = var.fargate_cpu
+  fargate_cpu    = var.fargate_cpu
   fargate_memory = var.fargate_memory
 
   ecs_sg                      = module.alb.nextjs_alb_sg_id
   nextjs_alb_target_group_arn = module.alb.nextjs_alb_target_group_arn
   flask_alb_target_group_arn  = module.alb.flask_alb_target_group_arn
   role_name                   = var.role_name
-  internal_alb_dns_name = module.alb.internal_alb_dns_name
+  internal_alb_dns_name       = module.alb.internal_alb_dns_name
 }
