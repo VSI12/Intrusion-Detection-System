@@ -1,5 +1,4 @@
 import os
-import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from preprocess import preprocess, model
@@ -7,30 +6,37 @@ from preprocess import preprocess, model
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers=["Content-Type"])
 
+# Constants
+UPLOAD_DIR = '/tmp'
+DEFAULT_PORT = 5000
+
 
 @app.route("/health")
 def health():
     return "OK", 200
 
+
 @app.route('/upload', methods=['POST'])
-def upload_file(): 
+def upload_file():
+    """Handle file upload, preprocessing, and ML inference."""
     try:
         if 'file' not in request.files:
             return jsonify({"error": "No file part"}), 400
-        
+
         file = request.files['file']
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
-        
+
         # Save the file to /tmp dir within fargate
-        upload_path = os.path.join('/tmp', file.filename)
-        os.makedirs('/tmp', exist_ok=True)
+        upload_path = os.path.join(UPLOAD_DIR, file.filename)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
         file.save(upload_path)
         print(f"File saved to: {upload_path}")
 
-         # Step 1: Preprocess the file
+        # Step 1: Preprocess the file
         processed_data = preprocess(upload_path)
         print("Data preprocessed successfully.")
+
         # Step 2: Run ML inference
         predictions = model(processed_data)
 
@@ -46,4 +52,4 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', DEFAULT_PORT)))
