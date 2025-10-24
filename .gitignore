@@ -26,5 +26,12 @@ crash.log
 # Ignore output logs
 terraform.tf.log
 
-#Python virtual environment
+# Python virtual environment
 .venv
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
